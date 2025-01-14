@@ -1,0 +1,7 @@
+# Force text files to use LF line endings in the repository
+* text=auto
+
+# Unity files that should retain CRLF line endings
+*.unity text eol=crlf
+*.prefab text eol=crlf
+*.asset text eol=crlf
