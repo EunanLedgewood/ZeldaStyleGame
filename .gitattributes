@@ -1,7 +1,16 @@
-# Force text files to use LF line endings in the repository
+# Force all text files to use LF line endings in the repository
 * text=auto
 
 # Unity files that should retain CRLF line endings
 *.unity text eol=crlf
 *.prefab text eol=crlf
 *.asset text eol=crlf
+
+# C# source code files should also have LF line endings
+*.cs text eol=lf
+
+# Ensuring that other common file types also use LF
+*.txt text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.xml text eol=lf
