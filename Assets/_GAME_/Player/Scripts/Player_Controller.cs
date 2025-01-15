@@ -20,22 +20,37 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
+    [Header("Pushable Object")]
+    [SerializeField] private float pushStrength = 5f; // Adjusted push strength for controlled movement
+    [SerializeField] private Transform _objectToPush; // Reference to the object to be pushed
+
     private Vector2 _moveDir = Vector2.zero;
     private Directions _facingDirection = Directions.RIGHT;
 
     // Hashes for animator states
     private readonly int _animMoveRight = Animator.StringToHash("Anim_Player_Move_Right");
     private readonly int _animIdleRight = Animator.StringToHash("Anim_Player_Idle_Right");
+    private readonly int _animMoveLeft = Animator.StringToHash("Anim_Player_Move_Left");
+    private readonly int _animIdleLeft = Animator.StringToHash("Anim_Player_Idle_Left");
     private readonly int _animMoveUp = Animator.StringToHash("Anim_Player_Move_Up");
     private readonly int _animMoveDown = Animator.StringToHash("Anim_Player_Move_Down");
-    private readonly int _animIdleUp = Animator.StringToHash("Anim_Player_Idle_Up"); // If you have an idle up animation
-    private readonly int _animIdleDown = Animator.StringToHash("Anim_Player_Idle_Down"); // If you have an idle down animation
+    private readonly int _animIdleUp = Animator.StringToHash("Anim_Player_Idle_Up");
+    private readonly int _animIdleDown = Animator.StringToHash("Anim_Player_Idle_Down");
 
     private void Awake()
     {
         if (_rb == null) Debug.LogError("Rigidbody2D is not assigned in Player_Controller!");
         if (_animator == null) Debug.LogError("Animator is not assigned in Player_Controller!");
         if (_spriteRenderer == null) Debug.LogError("SpriteRenderer is not assigned in Player_Controller!");
+    }
+
+    private void Start()
+    {
+        // Ensure gravity scale is set to 0 for pushable objects to prevent them from falling at the start
+        if (_objectToPush != null && _objectToPush.GetComponent<Rigidbody2D>())
+        {
+            _objectToPush.GetComponent<Rigidbody2D>().gravityScale = 0; // Disable gravity for pushable objects
+        }
     }
 
     private void Update()
@@ -45,6 +60,7 @@ public class Player_Controller : MonoBehaviour
             GatherInput();
             CalculateFacingDirection();
             UpdateAnimation();
+            TryPushObject();
         }
     }
 
@@ -72,21 +88,22 @@ public class Player_Controller : MonoBehaviour
 
     private void CalculateFacingDirection()
     {
-        // Update facing direction based on movement
+        // If moving right
         if (_moveDir.x > 0)
         {
             _facingDirection = Directions.RIGHT;
         }
+        // If moving left
         else if (_moveDir.x < 0)
         {
             _facingDirection = Directions.LEFT;
         }
-
-        // If the movement is vertical, the facing direction is either up or down
-        if (_moveDir.y > 0)
+        // If moving up
+        else if (_moveDir.y > 0)
         {
             _facingDirection = Directions.UP;
         }
+        // If moving down
         else if (_moveDir.y < 0)
         {
             _facingDirection = Directions.DOWN;
@@ -97,47 +114,63 @@ public class Player_Controller : MonoBehaviour
     {
         if (_spriteRenderer == null || _animator == null) return;
 
-        // Flip sprite for left direction (already works based on the X-axis)
-        _spriteRenderer.flipX = _facingDirection == Directions.LEFT;
-
-        // Handle movement animations
+        // If player is moving
         if (_moveDir.sqrMagnitude > 0)
         {
-            // Horizontal Movement (Right)
-            if (_moveDir.x > 0)
+            if (_facingDirection == Directions.RIGHT) // Right movement
             {
                 _animator.CrossFade(_animMoveRight, 0);
             }
-            // Vertical Movement (Up)
-            else if (_moveDir.y > 0)
+            else if (_facingDirection == Directions.LEFT) // Left movement
+            {
+                _animator.CrossFade(_animMoveLeft, 0);
+            }
+            else if (_facingDirection == Directions.UP) // Up movement
             {
                 _animator.CrossFade(_animMoveUp, 0);
             }
-            // Vertical Movement (Down)
-            else if (_moveDir.y < 0)
+            else if (_facingDirection == Directions.DOWN) // Down movement
             {
                 _animator.CrossFade(_animMoveDown, 0);
             }
         }
+        // If player is idle
         else
         {
-            // Idle animations
-            if (_facingDirection == Directions.RIGHT)
+            if (_facingDirection == Directions.RIGHT) // Idle Right
             {
                 _animator.CrossFade(_animIdleRight, 0);
             }
-            else if (_facingDirection == Directions.UP)
+            else if (_facingDirection == Directions.LEFT) // Idle Left
+            {
+                _animator.CrossFade(_animIdleLeft, 0);  // Use idle animation for right-facing, no flip needed
+            }
+            else if (_facingDirection == Directions.UP) // Idle Up
             {
                 _animator.CrossFade(_animIdleUp, 0);
             }
-            else if (_facingDirection == Directions.DOWN)
+            else if (_facingDirection == Directions.DOWN) // Idle Down
             {
                 _animator.CrossFade(_animIdleDown, 0);
             }
-            else // Default Idle (Left-facing idle if needed)
+        }
+    }
+
+    private void TryPushObject()
+    {
+        // Only push the object if it's set and in range
+        if (_objectToPush != null)
+        {
+            Vector3 objectOffset = _objectToPush.position - transform.position; // Offset between player and object
+
+            // If the object is close enough to the player, we attach it
+            if (objectOffset.magnitude < 1f)
             {
-                _animator.CrossFade(_animIdleRight, 0); // Adjust to idle state for left if needed
+                _objectToPush.position = transform.position + objectOffset; // Keep the relative offset intact
             }
+
+            // Apply movement based on player's movement (drag the object)
+            _objectToPush.position += (Vector3)_moveDir * pushStrength * Time.deltaTime; // Move object with player
         }
     }
 

@@ -14,7 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_GAME_/Scenes/Balance1.unity
     guid: 1b03a5ff5d033ad448c56f21598edd13
-  - enabled: 0
-    path: Assets/_GAME_/Scenes/HomeTown.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/_GAME_/Scenes/Chaos1.unity
+    guid: 14ff539f47b21b64f97af56289c64ff6
+  - enabled: 1
+    path: Assets/_GAME_/Scenes/Order1ForgottenVillage.unity
+    guid: 853b0d825e9e3284594b08b0024d626e
   m_configObjects: {}
