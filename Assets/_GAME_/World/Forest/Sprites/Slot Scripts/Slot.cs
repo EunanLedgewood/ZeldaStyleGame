@@ -2,11 +2,16 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public Sprite slotSprite; // Assign this sprite in the Inspector
+    public string slotColor; // Assign in Inspector (e.g., "Red", "Blue")
+    private bool isFilled = false;
 
-    // Check if the square's sprite matches the slot's sprite
-    public bool IsCorrectSprite(Sprite squareSprite)
+    public void BoxPlaced()
     {
-        return squareSprite == slotSprite;
+        if (!isFilled)
+        {
+            isFilled = true;
+            GameManager.Instance.CheckLevelCompletion();
+        }
     }
 }
+
