@@ -2,16 +2,20 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public string slotColor; // Assign in Inspector (e.g., "Red", "Blue")
+    public string slotColor; // Set this in the Inspector (e.g., "Red", "Blue", "White")
     private bool isFilled = false;
 
-    public void BoxPlaced()
+    public void FillSlot()
     {
         if (!isFilled)
         {
             isFilled = true;
-            GameManager.Instance.CheckLevelCompletion();
+            GameManager.instance.CheckAllSlotsFilled(); // Notify GameManager
         }
     }
-}
 
+    public bool IsFilled()
+    {
+        return isFilled;
+    }
+}

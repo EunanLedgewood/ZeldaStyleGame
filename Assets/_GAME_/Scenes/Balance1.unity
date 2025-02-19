@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 39224094}
   - component: {fileID: 39224093}
   - component: {fileID: 39224092}
-  - component: {fileID: 39224091}
+  - component: {fileID: 39224095}
   m_Layer: 0
   m_Name: RedSlot
   m_TagString: Untagged
@@ -141,34 +141,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &39224091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 39224090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba14ec87ab7cb3343aaa9f53ef0d8ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  playerController: {fileID: 0}
-  dialogueLines:
-  - "Ah, brave one! You stand before the Three Blades of Eternity\u2014each forged
-    with purpose, each holding a destiny of its own."
-  - The Sword of Chaos thrives on unpredictability and raw, untamed power. Wield
-    it, and you may shatter your enemies... or yourself.
-  - The Sword of Balance is the path of harmony. Neither light nor dark, it is the
-    blade for those who seek equilibrium and fairness.
-  - The Sword of Order embodies control and discipline. It demands precision and
-    unwavering focus to uphold the laws of the realm.
-  - Choose wisely, for the sword you claim will define your fate and the challenges
-    you face.
-  - When you are ready, walk up to the sword that calls to your heart and press 'E'
-    to claim it.
-  npcImage: {fileID: 21300000, guid: 19b976a24da58884cb9ac82a0420eb16, type: 3}
 --- !u!61 &39224092
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -281,6 +253,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &39224095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39224090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47927d8fc3d581845a2782f4f116011d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotColor: Red
 --- !u!1 &206707213
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +740,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1566173548, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: 1107795677, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.7490023
+      m_AnimationSpeed: 1.2829874
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 5, y: -4, z: 0}
@@ -764,7 +749,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 632668182, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -171332448, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.0439422
+      m_AnimationSpeed: 1.4611856
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 0, y: -3, z: 0}
@@ -773,7 +758,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.6025106
+      m_AnimationSpeed: 1.4228055
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 6, y: -3, z: 0}
@@ -782,7 +767,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 46945195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: 288142018, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.0713987
+      m_AnimationSpeed: 0.8617617
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 1, y: -1, z: 0}
@@ -791,7 +776,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.658943
+      m_AnimationSpeed: 0.79482913
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 3, y: -1, z: 0}
@@ -800,7 +785,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 632668182, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -171332448, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.3342826
+      m_AnimationSpeed: 1.8079453
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 6, y: -1, z: 0}
@@ -809,7 +794,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1566173548, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: 1107795677, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.5767391
+      m_AnimationSpeed: 0.72791284
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 7, y: 0, z: 0}
@@ -818,7 +803,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1566173548, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: 1107795677, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.2875043
+      m_AnimationSpeed: 1.3871919
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -7, y: 1, z: 0}
@@ -827,7 +812,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.2318381
+      m_AnimationSpeed: 1.5542303
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -4, y: 1, z: 0}
@@ -836,7 +821,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 46945195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: 288142018, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.1265327
+      m_AnimationSpeed: 0.89332867
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 7, y: 1, z: 0}
@@ -845,7 +830,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 0.96304667
+      m_AnimationSpeed: 1.8395814
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -8, y: 2, z: 0}
@@ -854,7 +839,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.3399011
+      m_AnimationSpeed: 1.0750923
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 6, y: 2, z: 0}
@@ -863,7 +848,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 0.589118
+      m_AnimationSpeed: 0.92859566
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 7, y: 2, z: 0}
@@ -872,7 +857,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.988213
+      m_AnimationSpeed: 1.402787
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 0, y: 3, z: 0}
@@ -881,7 +866,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -792417377, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1614701195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.7553259
+      m_AnimationSpeed: 1.2511184
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 6, y: 3, z: 0}
@@ -890,7 +875,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 632668182, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -171332448, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.6593812
+      m_AnimationSpeed: 1.438344
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 7, y: 3, z: 0}
@@ -899,7 +884,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 632668182, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -171332448, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.3055699
+      m_AnimationSpeed: 0.63683414
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 1, y: 4, z: 0}
@@ -908,7 +893,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: 46945195, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: 288142018, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 0.6035592
+      m_AnimationSpeed: 1.6875452
       m_AnimationTimeOffset: 0
       m_Flags: 0
   m_TileAssetArray:
@@ -1003,6 +988,50 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &373324259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 373324261}
+  - component: {fileID: 373324260}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &373324260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373324259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bc0c427cf8fef40a9f773ef314c294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &373324261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373324259}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.65121, y: 2.6500533, z: -0.019027635}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &440003395
 GameObject:
   m_ObjectHideFlags: 0
@@ -12130,7 +12159,7 @@ GameObject:
   - component: {fileID: 580869783}
   - component: {fileID: 580869782}
   - component: {fileID: 580869781}
-  - component: {fileID: 580869780}
+  - component: {fileID: 580869784}
   m_Layer: 0
   m_Name: BlueSlot
   m_TagString: Untagged
@@ -12138,34 +12167,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &580869780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 580869779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba14ec87ab7cb3343aaa9f53ef0d8ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  playerController: {fileID: 0}
-  dialogueLines:
-  - "Ah, brave one! You stand before the Three Blades of Eternity\u2014each forged
-    with purpose, each holding a destiny of its own."
-  - The Sword of Chaos thrives on unpredictability and raw, untamed power. Wield
-    it, and you may shatter your enemies... or yourself.
-  - The Sword of Balance is the path of harmony. Neither light nor dark, it is the
-    blade for those who seek equilibrium and fairness.
-  - The Sword of Order embodies control and discipline. It demands precision and
-    unwavering focus to uphold the laws of the realm.
-  - Choose wisely, for the sword you claim will define your fate and the challenges
-    you face.
-  - When you are ready, walk up to the sword that calls to your heart and press 'E'
-    to claim it.
-  npcImage: {fileID: 21300000, guid: 19b976a24da58884cb9ac82a0420eb16, type: 3}
 --- !u!61 &580869781
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12278,6 +12279,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &580869784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580869779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47927d8fc3d581845a2782f4f116011d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotColor: Blue
 --- !u!1 &643690651
 GameObject:
   m_ObjectHideFlags: 0
@@ -12349,7 +12363,7 @@ CompositeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_GeometryType: 0
   m_GenerationType: 0
-  m_EdgeRadius: 0.1
+  m_EdgeRadius: 0.35
   m_ColliderPaths:
   - m_Collider: {fileID: 643690655}
     m_ColliderPaths:
@@ -15189,7 +15203,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.5695769
+      m_AnimationSpeed: 1.6683154
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -4, y: -6, z: 0}
@@ -15198,7 +15212,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.615805
+      m_AnimationSpeed: 0.8349403
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -3, y: -6, z: 0}
@@ -15207,7 +15221,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.0587108
+      m_AnimationSpeed: 1.8859131
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -2, y: -6, z: 0}
@@ -15216,7 +15230,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.7600541
+      m_AnimationSpeed: 1.0655894
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -1, y: -6, z: 0}
@@ -15225,7 +15239,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.1585476
+      m_AnimationSpeed: 1.6422325
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 0, y: -6, z: 0}
@@ -15234,7 +15248,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.267538
+      m_AnimationSpeed: 1.2064236
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 1, y: -6, z: 0}
@@ -15243,7 +15257,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.3354925
+      m_AnimationSpeed: 1.8086548
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 2, y: -6, z: 0}
@@ -15252,7 +15266,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 0.52325314
+      m_AnimationSpeed: 1.5927713
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 3, y: -6, z: 0}
@@ -15261,7 +15275,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 0.59834284
+      m_AnimationSpeed: 1.4017267
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 4, y: -6, z: 0}
@@ -15270,7 +15284,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.3058006
+      m_AnimationSpeed: 0.6427829
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 5, y: -6, z: 0}
@@ -15279,7 +15293,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.5709989
+      m_AnimationSpeed: 0.96630645
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 6, y: -6, z: 0}
@@ -15288,7 +15302,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.010479
+      m_AnimationSpeed: 0.7319333
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -7, y: -5, z: 0}
@@ -15297,7 +15311,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1934014498, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
       - {fileID: -1197618144, guid: 5f419cce9edf44a48b06b843d4caa646, type: 3}
-      m_AnimationSpeed: 1.2966373
+      m_AnimationSpeed: 1.6286285
       m_AnimationTimeOffset: 0
       m_Flags: 0
   m_TileAssetArray:
@@ -15825,6 +15839,37 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &699864628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699864629}
+  m_Layer: 0
+  m_Name: '********************************************** (8)'
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &699864629
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699864628}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &701974662
 GameObject:
   m_ObjectHideFlags: 0
@@ -16143,8 +16188,8 @@ GameObject:
   - component: {fileID: 975958762}
   - component: {fileID: 975958761}
   - component: {fileID: 975958760}
-  - component: {fileID: 975958759}
   - component: {fileID: 975958763}
+  - component: {fileID: 975958764}
   m_Layer: 0
   m_Name: BlueKey
   m_TagString: Pushable
@@ -16152,34 +16197,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &975958759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 975958758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba14ec87ab7cb3343aaa9f53ef0d8ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  playerController: {fileID: 0}
-  dialogueLines:
-  - "Ah, brave one! You stand before the Three Blades of Eternity\u2014each forged
-    with purpose, each holding a destiny of its own."
-  - The Sword of Chaos thrives on unpredictability and raw, untamed power. Wield
-    it, and you may shatter your enemies... or yourself.
-  - The Sword of Balance is the path of harmony. Neither light nor dark, it is the
-    blade for those who seek equilibrium and fairness.
-  - The Sword of Order embodies control and discipline. It demands precision and
-    unwavering focus to uphold the laws of the realm.
-  - Choose wisely, for the sword you claim will define your fate and the challenges
-    you face.
-  - When you are ready, walk up to the sword that calls to your heart and press 'E'
-    to claim it.
-  npcImage: {fileID: 21300000, guid: 19b976a24da58884cb9ac82a0420eb16, type: 3}
 --- !u!61 &975958760
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16319,6 +16336,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &975958764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 975958758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70007039c6d88ae4e8012b5dbe190d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: Blue
 --- !u!1 &976881963
 GameObject:
   m_ObjectHideFlags: 0
@@ -16654,8 +16684,8 @@ GameObject:
   - component: {fileID: 1083776899}
   - component: {fileID: 1083776898}
   - component: {fileID: 1083776897}
-  - component: {fileID: 1083776896}
   - component: {fileID: 1083776900}
+  - component: {fileID: 1083776901}
   m_Layer: 0
   m_Name: WhiteKey
   m_TagString: Pushable
@@ -16663,34 +16693,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1083776896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083776895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba14ec87ab7cb3343aaa9f53ef0d8ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  playerController: {fileID: 0}
-  dialogueLines:
-  - "Ah, brave one! You stand before the Three Blades of Eternity\u2014each forged
-    with purpose, each holding a destiny of its own."
-  - The Sword of Chaos thrives on unpredictability and raw, untamed power. Wield
-    it, and you may shatter your enemies... or yourself.
-  - The Sword of Balance is the path of harmony. Neither light nor dark, it is the
-    blade for those who seek equilibrium and fairness.
-  - The Sword of Order embodies control and discipline. It demands precision and
-    unwavering focus to uphold the laws of the realm.
-  - Choose wisely, for the sword you claim will define your fate and the challenges
-    you face.
-  - When you are ready, walk up to the sword that calls to your heart and press 'E'
-    to claim it.
-  npcImage: {fileID: 21300000, guid: 19b976a24da58884cb9ac82a0420eb16, type: 3}
 --- !u!61 &1083776897
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16830,6 +16832,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1083776901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083776895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70007039c6d88ae4e8012b5dbe190d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: White
 --- !u!1 &1099250268
 GameObject:
   m_ObjectHideFlags: 0
@@ -17039,8 +17054,8 @@ GameObject:
   - component: {fileID: 1211699557}
   - component: {fileID: 1211699556}
   - component: {fileID: 1211699555}
-  - component: {fileID: 1211699554}
   - component: {fileID: 1211699558}
+  - component: {fileID: 1211699559}
   m_Layer: 0
   m_Name: RedKey
   m_TagString: Pushable
@@ -17048,34 +17063,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1211699554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1211699553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba14ec87ab7cb3343aaa9f53ef0d8ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  playerController: {fileID: 0}
-  dialogueLines:
-  - "Ah, brave one! You stand before the Three Blades of Eternity\u2014each forged
-    with purpose, each holding a destiny of its own."
-  - The Sword of Chaos thrives on unpredictability and raw, untamed power. Wield
-    it, and you may shatter your enemies... or yourself.
-  - The Sword of Balance is the path of harmony. Neither light nor dark, it is the
-    blade for those who seek equilibrium and fairness.
-  - The Sword of Order embodies control and discipline. It demands precision and
-    unwavering focus to uphold the laws of the realm.
-  - Choose wisely, for the sword you claim will define your fate and the challenges
-    you face.
-  - When you are ready, walk up to the sword that calls to your heart and press 'E'
-    to claim it.
-  npcImage: {fileID: 21300000, guid: 19b976a24da58884cb9ac82a0420eb16, type: 3}
 --- !u!61 &1211699555
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17215,6 +17202,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1211699559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211699553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70007039c6d88ae4e8012b5dbe190d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxColor: Red
 --- !u!1 &1368927899
 GameObject:
   m_ObjectHideFlags: 0
@@ -22282,7 +22282,7 @@ GameObject:
   - component: {fileID: 1714202823}
   - component: {fileID: 1714202822}
   - component: {fileID: 1714202821}
-  - component: {fileID: 1714202820}
+  - component: {fileID: 1714202824}
   m_Layer: 0
   m_Name: WhiteSlot
   m_TagString: Untagged
@@ -22290,34 +22290,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1714202820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714202819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba14ec87ab7cb3343aaa9f53ef0d8ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueManager: {fileID: 0}
-  playerController: {fileID: 0}
-  dialogueLines:
-  - "Ah, brave one! You stand before the Three Blades of Eternity\u2014each forged
-    with purpose, each holding a destiny of its own."
-  - The Sword of Chaos thrives on unpredictability and raw, untamed power. Wield
-    it, and you may shatter your enemies... or yourself.
-  - The Sword of Balance is the path of harmony. Neither light nor dark, it is the
-    blade for those who seek equilibrium and fairness.
-  - The Sword of Order embodies control and discipline. It demands precision and
-    unwavering focus to uphold the laws of the realm.
-  - Choose wisely, for the sword you claim will define your fate and the challenges
-    you face.
-  - When you are ready, walk up to the sword that calls to your heart and press 'E'
-    to claim it.
-  npcImage: {fileID: 21300000, guid: 19b976a24da58884cb9ac82a0420eb16, type: 3}
 --- !u!61 &1714202821
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -22430,6 +22402,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1714202824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714202819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47927d8fc3d581845a2782f4f116011d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotColor: White
 --- !u!1 &1737829470
 GameObject:
   m_ObjectHideFlags: 0
@@ -22717,3 +22702,5 @@ SceneRoots:
   - {fileID: 998616858}
   - {fileID: 840505116}
   - {fileID: 976881966}
+  - {fileID: 699864629}
+  - {fileID: 373324261}
