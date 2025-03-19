@@ -1,22 +1,26 @@
 using UnityEngine;
-using TMPro; // Make sure to use TextMeshPro
+using TMPro;
 
 public class ClueBox : MonoBehaviour
 {
     public int clueNumber;
-    public TextMeshProUGUI clueDisplay; // Assign this in Inspector (TextMeshPro)
+    public int boxIndex; // This identifies which number box this clue corresponds to (1, 2, 3, or 4)
+    public TextMeshProUGUI clueDisplay;
 
     private void Start()
     {
-        clueNumber = Random.Range(1, 10); // Random number between 1-9
+        // Generate a random number between 1-9
+        clueNumber = Random.Range(1, 10);
         UpdateDisplay();
+        Debug.Log($"ClueBox {gameObject.name} (index {boxIndex}) initialized with number {clueNumber}");
     }
 
     private void UpdateDisplay()
     {
         if (clueDisplay != null)
         {
-            clueDisplay.text = clueNumber.ToString(); // Show the number
+            clueDisplay.text = clueNumber.ToString();
+            Debug.Log($"Updated clue display to {clueNumber}");
         }
         else
         {

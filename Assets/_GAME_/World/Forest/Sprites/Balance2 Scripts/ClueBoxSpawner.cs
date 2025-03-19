@@ -1,21 +1,23 @@
 using UnityEngine;
 
-public class ClueBoxSpawner : MonoBehaviour
+public class ClueBoxManager : MonoBehaviour
 {
-    public GameObject clueBoxPrefab;
-    public Transform[] spawnPoints; // Assign 4 empty GameObjects in the Inspector
+    public GameObject clueBoxPrefab; // Assign the ClueBox prefab in the Inspector
+    public Transform[] spawnPoints; // Assign 4 spawn points in the Inspector
 
     private void Start()
     {
-        if (spawnPoints.Length < 4)
+        if (spawnPoints.Length != 4)
         {
-            Debug.LogError("Assign at least 4 spawn points in the Inspector!");
+            Debug.LogError("Assign exactly 4 spawn points in the Inspector!");
             return;
         }
 
-        foreach (Transform spawnPoint in spawnPoints)
+        // Spawn 4 Clue Boxes at the spawn points
+        for (int i = 0; i < 4; i++)
         {
-            Instantiate(clueBoxPrefab, spawnPoint.position, Quaternion.identity);
+            GameObject clueBox = Instantiate(clueBoxPrefab, spawnPoints[i].position, Quaternion.identity);
+            clueBox.name = "ClueBox_" + i; // Rename for clarity
         }
     }
 }

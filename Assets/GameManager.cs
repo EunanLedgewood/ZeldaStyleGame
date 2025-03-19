@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             Debug.Log("Cheat activated: Skipping to Balance2");
-            SceneManager.LoadScene("Balance2");
+            SceneManager.LoadScene("Balance2"); 
         }
     }
 
