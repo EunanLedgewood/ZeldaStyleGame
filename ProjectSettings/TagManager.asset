@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pushable
-  - Border
   layers:
   - Default
   - TransparentFX
@@ -57,4 +56,13 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 1626587889
+    locked: 0
+  - name: Wall
+    uniqueID: 1714185915
+    locked: 0
+  - name: Obstacle
+    uniqueID: 1924712367
+    locked: 0
+  - name: Box
+    uniqueID: 255887341
     locked: 0

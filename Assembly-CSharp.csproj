@@ -71,6 +71,7 @@
     <Compile Include="Assets\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Slot Scripts\Slot.cs" />
     <Compile Include="Assets\_GAME_\Player\Scripts\Player_Controller.cs" />
+    <Compile Include="Assets\_GAME_\Enemy\Arrow.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\NPC Scripts\SwordOfChaosDialogue.cs" />
+    <Compile Include="Assets\_GAME_\Player\Scripts\Player_Health.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\BridgeCodeArea.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\ClueBox.cs" />
@@ -94,12 +96,14 @@
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Pushables Scripts\PushableSquare.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\NPC Scripts\SwordOfBalanceDialogue.cs" />
+    <Compile Include="Assets\_GAME_\Enemy\Enemy Archer.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Pushables Scripts\Box.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\NPC Scripts\SwordOfOrderDialogue.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\UI Manager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\ClueBoxSpawner.cs" />
