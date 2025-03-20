@@ -23,14 +23,12 @@ public class Player_Health : MonoBehaviour
     private bool isInvincible = false;
     private Rigidbody2D rb;
     private Player_Controller playerController;
-    private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerController = GetComponent<Player_Controller>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
         if (audioSource == null)
@@ -101,16 +99,27 @@ public class Player_Health : MonoBehaviour
             playerController.LockMovement(false);
         }
 
+        // Get all renderers (could be SpriteRenderer or other renderer types)
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
         // Continue flashing for the duration of invincibility
         while (elapsedTime < invincibilityDuration)
         {
-            spriteRenderer.enabled = !spriteRenderer.enabled;
+            // Toggle visibility for all renderers
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.enabled = !renderer.enabled;
+            }
             yield return new WaitForSeconds(0.1f);
             elapsedTime += 0.1f;
         }
 
-        // Ensure sprite is visible when invincibility ends
-        spriteRenderer.enabled = true;
+        // Ensure all renderers are visible when invincibility ends
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = true;
+        }
+
         isInvincible = false;
     }
 
@@ -153,10 +162,11 @@ public class Player_Health : MonoBehaviour
             gameOverPanel.SetActive(true);
         }
 
-        // Disable player sprite
-        if (spriteRenderer != null)
+        // Disable all player renderers
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers)
         {
-            spriteRenderer.enabled = false;
+            renderer.enabled = false;
         }
 
         // Trigger game over sequence
@@ -184,12 +194,23 @@ public class Player_Health : MonoBehaviour
     // Add this to the player GameObject to detect collisions with arrows
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("Player_Health OnTriggerEnter2D with: " + other.gameObject.name + " (Tag: " + other.gameObject.tag + ")");
+
         if (other.CompareTag("Arrow"))
         {
+            Debug.Log("Arrow detected by Player_Health script");
             Arrow arrow = other.GetComponent<Arrow>();
             if (arrow != null)
             {
+                Debug.Log("Valid Arrow component found, taking damage");
                 TakeDamage(1, arrow.GetOriginPosition());
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                Debug.LogError("Arrow tag present but no Arrow component found!");
+                // Fallback: take damage even without Arrow component
+                TakeDamage(1, other.transform.position);
                 Destroy(other.gameObject);
             }
         }

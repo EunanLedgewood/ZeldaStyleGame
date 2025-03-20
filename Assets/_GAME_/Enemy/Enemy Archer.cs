@@ -5,9 +5,7 @@ using UnityEngine;
 public class Enemy_Archer : MonoBehaviour
 {
     [Header("Attack Settings")]
-    [SerializeField] private float attackRange = 7f;
-    [SerializeField] private float attackCooldown = 2f;
-    [SerializeField] private float detectionInterval = 0.5f; // How often to check for player
+    [SerializeField] private float attackCooldown = 3f; // Set to exactly 3 seconds
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform arrowSpawnPoint;
 
@@ -19,8 +17,6 @@ public class Enemy_Archer : MonoBehaviour
 
     private Transform playerTransform;
     private float cooldownTimer = 0f;
-    private float detectionTimer = 0f;
-    private bool playerInRange = false;
     private AudioSource audioSource;
 
     // Animation hash IDs (create these in your animator)
@@ -51,53 +47,23 @@ public class Enemy_Archer : MonoBehaviour
         {
             Debug.LogError("Enemy_Archer: Player not found. Make sure your player has the 'Player' tag!");
         }
+
+        // Start with a random cooldown between 0-3 seconds to stagger multiple enemies
+        cooldownTimer = Random.Range(0f, 3f);
     }
 
     private void Update()
     {
         if (playerTransform == null) return;
 
-        // Count down timers
+        // Count down timer
         cooldownTimer -= Time.deltaTime;
-        detectionTimer -= Time.deltaTime;
 
-        // Check for player detection at intervals (performance optimization)
-        if (detectionTimer <= 0)
-        {
-            CheckForPlayer();
-            detectionTimer = detectionInterval;
-        }
-
-        // Attack if player is in range and cooldown is complete
-        if (playerInRange && cooldownTimer <= 0)
+        // Attack when cooldown is complete, regardless of player position
+        if (cooldownTimer <= 0)
         {
             Attack();
             cooldownTimer = attackCooldown;
-        }
-    }
-
-    private void CheckForPlayer()
-    {
-        if (playerTransform == null) return;
-
-        // Calculate distance to player
-        float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
-
-        // Check if player is within attack range
-        playerInRange = distanceToPlayer <= attackRange;
-
-        // Check for obstacles between enemy and player
-        if (playerInRange)
-        {
-            Vector2 directionToPlayer = (playerTransform.position - transform.position).normalized;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, directionToPlayer, distanceToPlayer,
-                               LayerMask.GetMask("Obstacle", "Wall"));
-
-            // If there's an obstacle, player is not in range
-            if (hit.collider != null)
-            {
-                playerInRange = false;
-            }
         }
     }
 
@@ -154,7 +120,12 @@ public class Enemy_Archer : MonoBehaviour
     // Draw gizmos for easier editor visualization
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        // Draw an arrow to show the firing direction
+        if (Application.isPlaying && playerTransform != null)
+        {
+            Gizmos.color = Color.red;
+            Vector3 direction = (playerTransform.position - transform.position).normalized;
+            Gizmos.DrawRay(transform.position, direction * 2f);
+        }
     }
 }

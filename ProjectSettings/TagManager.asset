@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Pushable
+  - Arrow
+  - Wall
+  - Obstacle
+  - Box
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -14,12 +19,12 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Wall
+  - Obstacle
+  - Box
+  - Arrow
   - 
   - 
   - 
