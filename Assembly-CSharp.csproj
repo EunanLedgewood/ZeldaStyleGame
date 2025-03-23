@@ -63,13 +63,14 @@
     <Compile Include="Assets\_GAME_\Hotfixes\ArrowCollisionFix.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\ControlsDisplayManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\GameManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
-    <Compile Include="Assets\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Slot Scripts\Slot.cs" />
     <Compile Include="Assets\_GAME_\Player\Scripts\Player_Controller.cs" />
     <Compile Include="Assets\_GAME_\Enemy\Arrow.cs" />
@@ -111,8 +112,8 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\ClueBoxSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
-    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\MainMenu.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\LevelRevealManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\NPC Scripts\NPC.cs" />

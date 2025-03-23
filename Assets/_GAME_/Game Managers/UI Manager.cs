@@ -14,91 +14,154 @@ public class GameUI_Manager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button mainMenuButton;
-    [SerializeField] private TextMeshProUGUI gameOverText;
 
     [Header("Pause Menu")]
     [SerializeField] private GameObject pauseMenuPanel;
     [SerializeField] private Button resumeButton;
-    [SerializeField] private Button pauseMainMenuButton;
-    [SerializeField] private Button instructionsButton;
+    [SerializeField] private Button controlsButton;
+    [SerializeField] private Button mainMenuFromPauseButton;
     [SerializeField] private Button quitButton;
-    [SerializeField] private TextMeshProUGUI pauseMenuTitleText;
 
-    [Header("Instructions")]
-    [SerializeField] private GameObject instructionsPanel;
-    [SerializeField] private Button closeInstructionsButton;
-    [SerializeField] private Image instructionsImage;
-    [SerializeField] private TextMeshProUGUI instructionsTitleText;
+    [Header("Controls Panel")]
+    [SerializeField] private GameObject controlsPanel;
+    [SerializeField] private Button closeControlsButton;
+    [SerializeField] private bool closeButtonIsChildOfControlsPanel = false;
 
-    private bool _isPaused = false;
+    [Header("Game Objects To Hide")]
+    [SerializeField] private GameObject playerObject;
+    [SerializeField] private bool hidePlayerDuringMenus = true;
+    [SerializeField] private bool hideArrowsDuringMenus = true;
+    [SerializeField] private string arrowTag = "Arrow";
+
+    private bool isPaused = false;
+    private Renderer[] playerRenderers;
 
     private void Awake()
     {
+        // Store player renderers if we have a player reference
+        if (playerObject != null && hidePlayerDuringMenus)
+        {
+            playerRenderers = playerObject.GetComponentsInChildren<Renderer>();
+        }
+
         // Ensure panels are inactive at start
         if (gameOverPanel != null)
-        {
             gameOverPanel.SetActive(false);
-        }
 
         if (pauseMenuPanel != null)
-        {
             pauseMenuPanel.SetActive(false);
-        }
 
-        if (instructionsPanel != null)
+        if (controlsPanel != null)
+            controlsPanel.SetActive(false);
+
+        // Make sure close button is inactive at start if it's not a child of controls panel
+        if (closeControlsButton != null && !closeButtonIsChildOfControlsPanel)
         {
-            instructionsPanel.SetActive(false);
+            closeControlsButton.gameObject.SetActive(false);
         }
 
-        // Add listeners to game over buttons
+        // Game Over button listeners
         if (restartButton != null)
-        {
             restartButton.onClick.AddListener(RestartLevel);
-        }
 
         if (mainMenuButton != null)
-        {
             mainMenuButton.onClick.AddListener(GoToMainMenu);
-        }
 
-        // Add listeners to pause menu buttons
+        // Pause menu button listeners
         if (resumeButton != null)
-        {
             resumeButton.onClick.AddListener(TogglePause);
-        }
 
-        if (pauseMainMenuButton != null)
-        {
-            pauseMainMenuButton.onClick.AddListener(GoToMainMenu);
-        }
+        if (controlsButton != null)
+            controlsButton.onClick.AddListener(ShowControls);
 
-        if (instructionsButton != null)
-        {
-            instructionsButton.onClick.AddListener(ShowInstructions);
-        }
+        if (mainMenuFromPauseButton != null)
+            mainMenuFromPauseButton.onClick.AddListener(GoToMainMenu);
 
         if (quitButton != null)
-        {
             quitButton.onClick.AddListener(QuitGame);
+
+        // Controls panel button listener
+        if (closeControlsButton != null)
+        {
+            closeControlsButton.onClick.RemoveAllListeners(); // Clear any existing
+            closeControlsButton.onClick.AddListener(() => {
+                Debug.Log("Close button clicked!");
+                CloseControls();
+            });
+        }
+        else
+        {
+            Debug.LogWarning("Close controls button reference is missing!");
         }
 
-        // Add listener to close instructions button
-        if (closeInstructionsButton != null)
+        // Check if close button is actually a child of controls panel
+        if (closeControlsButton != null && controlsPanel != null)
         {
-            closeInstructionsButton.onClick.AddListener(CloseInstructions);
+            Transform parent = closeControlsButton.transform.parent;
+            while (parent != null)
+            {
+                if (parent == controlsPanel.transform)
+                {
+                    closeButtonIsChildOfControlsPanel = true;
+                    break;
+                }
+                parent = parent.parent;
+            }
+        }
+    }
+
+    private void Start()
+    {
+        // Double-check that close button is hidden if it's not a child of controls panel
+        if (closeControlsButton != null && !closeButtonIsChildOfControlsPanel)
+        {
+            closeControlsButton.gameObject.SetActive(false);
+        }
+
+        // If we don't have a player reference, try to find it
+        if (playerObject == null && hidePlayerDuringMenus)
+        {
+            // Look for common player tags/names
+            playerObject = GameObject.FindGameObjectWithTag("Player");
+
+            if (playerObject == null)
+            {
+                // Try to find by common names
+                playerObject = GameObject.Find("Player");
+            }
+
+            if (playerObject != null)
+            {
+                playerRenderers = playerObject.GetComponentsInChildren<Renderer>();
+                Debug.Log("Player found automatically: " + playerObject.name);
+            }
+            else
+            {
+                Debug.LogWarning("Player GameObject not found. Won't be able to hide player during menus.");
+            }
         }
     }
 
     private void Update()
     {
-        // Check for pause input (Escape key)
+        // Check for pause input
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            // If in controls panel, return to pause menu
+            if (controlsPanel != null && controlsPanel.activeSelf)
+            {
+                Debug.Log("Escape key pressed while controls visible - closing controls");
+                CloseControls();
+            }
+            // Otherwise toggle pause
+            else
+            {
+                TogglePause();
+            }
         }
     }
 
-    // Call this method from Player_Health when displaying Game Over
+    // Game Over methods
     public void ShowGameOver()
     {
         if (gameOverPanel != null)
@@ -106,104 +169,148 @@ public class GameUI_Manager : MonoBehaviour
             gameOverPanel.SetActive(true);
         }
 
-        // Make sure game is not paused when game over is shown
-        if (_isPaused)
+        // Ensure game is not paused
+        if (isPaused)
         {
-            SetPauseState(false);
+            Time.timeScale = 1f;
+            isPaused = false;
         }
     }
 
-    // Toggle pause state
+    // Pause methods
     public void TogglePause()
     {
-        SetPauseState(!_isPaused);
-    }
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0f : 1f;
 
-    // Set pause state with time scale control
-    private void SetPauseState(bool isPaused)
-    {
-        _isPaused = isPaused;
-
-        // Set time scale (0 = paused, 1 = normal)
-        Time.timeScale = _isPaused ? 0f : 1f;
-
-        // Activate/deactivate pause menu
         if (pauseMenuPanel != null)
         {
-            pauseMenuPanel.SetActive(_isPaused);
+            pauseMenuPanel.SetActive(isPaused);
         }
 
-        // Close instructions if unpausing
-        if (!_isPaused && instructionsPanel != null && instructionsPanel.activeSelf)
+        // If we're unpausing, make sure controls and close button are hidden
+        if (!isPaused)
         {
-            instructionsPanel.SetActive(false);
+            if (controlsPanel != null)
+                controlsPanel.SetActive(false);
+
+            if (closeControlsButton != null && !closeButtonIsChildOfControlsPanel)
+                closeControlsButton.gameObject.SetActive(false);
         }
+
+        // Show/hide player and arrows
+        SetGameObjectsVisibility(!isPaused);
     }
 
-    // Show instructions panel
-    public void ShowInstructions()
+    // Controls methods
+    public void ShowControls()
     {
-        if (instructionsPanel != null)
+        Debug.Log("ShowControls called");
+
+        // Hide pause menu and show controls
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(false);
+
+        if (controlsPanel != null)
+            controlsPanel.SetActive(true);
+
+        // If close button is separate from controls panel, explicitly activate it
+        if (closeControlsButton != null && !closeButtonIsChildOfControlsPanel)
         {
-            instructionsPanel.SetActive(true);
+            closeControlsButton.gameObject.SetActive(true);
+            Debug.Log("Close button activated");
         }
+
+        // Keep game objects hidden
+        SetGameObjectsVisibility(false);
+
+        // Make sure time remains paused
+        Time.timeScale = 0f;
     }
 
-    // Close instructions panel
-    public void CloseInstructions()
+    public void CloseControls()
     {
-        if (instructionsPanel != null)
+        Debug.Log("CloseControls called");
+
+        // Hide controls and show pause menu
+        if (controlsPanel != null)
+            controlsPanel.SetActive(false);
+
+        // If close button is separate from controls panel, explicitly deactivate it
+        if (closeControlsButton != null && !closeButtonIsChildOfControlsPanel)
         {
-            instructionsPanel.SetActive(false);
+            closeControlsButton.gameObject.SetActive(false);
+            Debug.Log("Close button deactivated");
         }
+
+        if (pauseMenuPanel != null)
+            pauseMenuPanel.SetActive(true);
+
+        // Keep game objects hidden
+        SetGameObjectsVisibility(false);
+
+        // Keep time paused
+        Time.timeScale = 0f;
     }
 
-    // Set the instructions image
-    public void SetInstructionsImage(Sprite instructionsSprite)
+    // Game object visibility
+    private void SetGameObjectsVisibility(bool visible)
     {
-        if (instructionsImage != null && instructionsSprite != null)
-        {
-            instructionsImage.sprite = instructionsSprite;
-        }
+        // Hide/show player
+        SetPlayerVisibility(visible);
+
+        // Hide/show arrows
+        SetArrowsVisibility(visible);
     }
 
-    // Update text elements - useful for localization
-    public void UpdateUIText(string gameOverString = "", string pauseMenuString = "", string instructionsString = "")
+    // Player visibility
+    private void SetPlayerVisibility(bool visible)
     {
-        if (gameOverText != null && !string.IsNullOrEmpty(gameOverString))
-        {
-            gameOverText.text = gameOverString;
-        }
+        if (!hidePlayerDuringMenus || playerObject == null || playerRenderers == null)
+            return;
 
-        if (pauseMenuTitleText != null && !string.IsNullOrEmpty(pauseMenuString))
+        foreach (Renderer renderer in playerRenderers)
         {
-            pauseMenuTitleText.text = pauseMenuString;
-        }
-
-        if (instructionsTitleText != null && !string.IsNullOrEmpty(instructionsString))
-        {
-            instructionsTitleText.text = instructionsString;
+            if (renderer != null)
+                renderer.enabled = visible;
         }
     }
 
-    // Button event to restart the current level
+    // Arrow visibility
+    private void SetArrowsVisibility(bool visible)
+    {
+        if (!hideArrowsDuringMenus)
+            return;
+
+        // Find all active arrows
+        GameObject[] arrows = GameObject.FindGameObjectsWithTag(arrowTag);
+
+        foreach (GameObject arrow in arrows)
+        {
+            Renderer[] renderers = arrow.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer != null)
+                    renderer.enabled = visible;
+            }
+        }
+    }
+
+    // Scene management
     public void RestartLevel()
     {
-        // Ensure time is back to normal speed before restarting
+        // Reset time scale
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // Button event to go back to the main menu
     public void GoToMainMenu()
     {
-        // Ensure time is back to normal speed before loading main menu
+        // Reset time scale
         Time.timeScale = 1f;
-        // Replace "MainMenu" with your actual main menu scene name
         SceneManager.LoadScene("MainMenu");
     }
 
-    // Button event to quit the game
     public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -213,7 +320,7 @@ public class GameUI_Manager : MonoBehaviour
 #endif
     }
 
-    // Get heart images for Player_Health script
+    // Heart management
     public GameObject[] GetHeartImages()
     {
         return heartImages;
