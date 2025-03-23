@@ -1,62 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float lifetime = 5f; // Destroy after this time
+    [SerializeField] private float lifetime = 5f;
 
     private Vector2 direction;
     private Vector2 originPosition;
+    private bool hasBeenInitialized = false;
 
-    // Set up the arrow with a direction
+    private void Awake()
+    {
+        // Destroy uninitialized arrows
+        Invoke("CheckInitialization", 0.1f);
+    }
+
+    private void Start()
+    {
+        // Start the self-destruct timer
+        Destroy(gameObject, lifetime);
+    }
+
+    private void CheckInitialization()
+    {
+        if (!hasBeenInitialized)
+        {
+            Debug.Log("Destroying uninitialized arrow");
+            Destroy(gameObject);
+        }
+    }
+
     public void Initialize(Vector2 direction, Vector2 origin)
     {
         this.direction = direction.normalized;
         this.originPosition = origin;
 
-        // Calculate the rotation based on the direction
+        // Calculate rotation based on direction
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        Debug.Log("Arrow initialized with direction: " + direction + ", angle: " + angle);
+        hasBeenInitialized = true;
 
-        // Start the self-destruct timer
-        Destroy(gameObject, lifetime);
+        Debug.Log($"Arrow initialized with direction {direction}, at position {transform.position}");
     }
 
     private void Update()
     {
-        // Move the arrow in its set direction
-        // Use transform.right since we've already rotated the arrow
-        transform.Translate(Vector3.right * speed * Time.deltaTime);
+        if (!hasBeenInitialized) return;
 
-        // Debug visualization of arrow direction
-        Debug.DrawRay(transform.position, transform.right * 2f, Color.yellow);
+        // Move the arrow in its direction
+        transform.Translate(Vector3.right * speed * Time.deltaTime);
     }
 
-    // Method to get the origin position (used for knockback direction)
     public Vector2 GetOriginPosition()
     {
         return originPosition;
     }
 
+    // Handle trigger collisions (when collider is a trigger)
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Arrow OnTriggerEnter2D with: " + other.gameObject.name + " (Tag: " + other.gameObject.tag + ")");
+        Debug.Log($"Arrow trigger collision with: {other.gameObject.name}, tag: {other.tag}");
 
-        // Destroy arrow if it hits walls, obstacles, or boxes
-        if (other.CompareTag("Wall") || other.CompareTag("Obstacle") || other.CompareTag("Box"))
-        {
-            Debug.Log("Arrow hit obstacle and will be destroyed");
-            Destroy(gameObject);
-        }
-
-        // We'll also detect player here as a backup
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Arrow hit player from Arrow script");
+            Debug.Log("Arrow hit player!");
             Player_Health playerHealth = other.GetComponent<Player_Health>();
             if (playerHealth != null)
             {
@@ -64,17 +72,46 @@ public class Arrow : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
-        // Note: Player hit is also handled by the Player_Health script
+        else if (other.CompareTag("Wall") || other.CompareTag("Obstacle") || other.CompareTag("Box"))
+        {
+            Debug.Log($"Arrow hit {other.tag}");
+            Destroy(gameObject);
+        }
     }
 
-    // Draw arrow direction in scene view for debugging
+    // Handle non-trigger collisions (when collider is not a trigger)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log($"Arrow collision with: {collision.gameObject.name}, tag: {collision.gameObject.tag}");
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Arrow hit player!");
+            Player_Health playerHealth = collision.gameObject.GetComponent<Player_Health>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(1, originPosition);
+                Destroy(gameObject);
+            }
+        }
+        else if (collision.gameObject.CompareTag("Wall") ||
+                 collision.gameObject.CompareTag("Obstacle") ||
+                 collision.gameObject.CompareTag("Box"))
+        {
+            Debug.Log($"Arrow hit {collision.gameObject.tag}");
+            Destroy(gameObject);
+        }
+    }
+
+    // Visual debugging - will show arrow path in Scene view
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.1f);
+
+        if (hasBeenInitialized && direction != Vector2.zero)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position, transform.right * 2f);
+            Gizmos.DrawRay(transform.position, direction);
         }
     }
 }

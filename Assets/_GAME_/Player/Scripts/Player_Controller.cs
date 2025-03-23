@@ -97,7 +97,7 @@ public class Player_Controller : MonoBehaviour
         else if (_moveDir.x < 0)
         {
             _facingDirection = Directions.LEFT;
-         }
+        }
         // If moving up
         else if (_moveDir.y > 0)
         {

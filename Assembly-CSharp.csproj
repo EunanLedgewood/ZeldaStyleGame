@@ -107,11 +107,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\UI Manager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\_GAME_\Tests\ArrowTest.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\ClueBoxSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\MainMenu.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\LevelRevealManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\NPC Scripts\NPC.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\NumberBox.cs" />

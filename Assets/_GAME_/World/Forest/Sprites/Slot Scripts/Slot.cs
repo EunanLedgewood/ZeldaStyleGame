@@ -10,7 +10,13 @@ public class Slot : MonoBehaviour
         if (!isFilled)
         {
             isFilled = true;
-            GameManager.instance.CheckAllSlotsFilled(); // Notify GameManager
+            Debug.Log($"Slot {slotColor} filled");
+
+            // Notify GameManager to check all slots
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.CheckAllSlotsFilled();
+            }
         }
     }
 

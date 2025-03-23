@@ -5,12 +5,10 @@ using UnityEngine;
 public class Enemy_Archer : MonoBehaviour
 {
     [Header("Attack Settings")]
-    [SerializeField] private float attackCooldown = 3f; // Set to exactly 3 seconds
+    [SerializeField] private float attackCooldown = 3f;
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform arrowSpawnPoint;
-
-    [Header("Animations")]
-    [SerializeField] private Animator animator;
+    [SerializeField] private Sprite arrowSprite; // Optional: backup sprite for arrows
 
     [Header("Audio")]
     [SerializeField] private AudioClip shootSound;
@@ -19,12 +17,9 @@ public class Enemy_Archer : MonoBehaviour
     private float cooldownTimer = 0f;
     private AudioSource audioSource;
 
-    // Animation hash IDs (create these in your animator)
-    private readonly int animIdle = Animator.StringToHash("Archer_Idle");
-    private readonly int animAttack = Animator.StringToHash("Archer_Attack");
-
     private void Awake()
     {
+        // Get audio source component
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -38,67 +33,87 @@ public class Enemy_Archer : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        // Find the player (you could also assign this in the inspector)
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        // Find player when enabled
+        playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        if (playerTransform == null)
-        {
-            Debug.LogError("Enemy_Archer: Player not found. Make sure your player has the 'Player' tag!");
-        }
+        // Set initial cooldown to a short delay
+        cooldownTimer = 0.5f;
 
-        // Start with a random cooldown between 0-3 seconds to stagger multiple enemies
-        cooldownTimer = Random.Range(0f, 3f);
+        Debug.Log($"Enemy_Archer enabled at {transform.position}");
     }
 
     private void Update()
     {
-        if (playerTransform == null) return;
+        // If player not found, try to find again
+        if (playerTransform == null)
+        {
+            playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            return;
+        }
 
         // Count down timer
         cooldownTimer -= Time.deltaTime;
 
-        // Attack when cooldown is complete, regardless of player position
+        // Attack when cooldown is complete
         if (cooldownTimer <= 0)
         {
-            Attack();
+            ShootArrow();
             cooldownTimer = attackCooldown;
         }
     }
 
-    private void Attack()
+    private void ShootArrow()
     {
-        if (arrowPrefab == null || playerTransform == null) return;
-
-        // Play attack animation
-        if (animator != null)
+        if (arrowPrefab == null)
         {
-            animator.CrossFade(animAttack, 0);
-            // Animation events can be used to time the actual arrow spawn
-            // Otherwise, you could add a slight delay here
+            Debug.LogError("Arrow prefab not assigned to Enemy_Archer!");
+            return;
         }
-        else
-        {
-            // If no animator, just shoot directly
-            ShootArrow();
-        }
-    }
 
-    // This can be called from animation events or directly
-    public void ShootArrow()
-    {
+        if (playerTransform == null)
+        {
+            playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            if (playerTransform == null)
+            {
+                Debug.LogError("Player not found. Cannot shoot arrow!");
+                return;
+            }
+        }
+
         // Calculate direction to player
         Vector2 directionToPlayer = (playerTransform.position - arrowSpawnPoint.position).normalized;
 
         // Create arrow
         GameObject arrowObject = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-        Arrow arrow = arrowObject.GetComponent<Arrow>();
 
-        // Set arrow direction and origin
+        // Make sure arrow is tagged correctly
+        arrowObject.tag = "Arrow";
+
+        // Ensure arrow is visible
+        SpriteRenderer spriteRenderer = arrowObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            // Make sure sprite renderer is enabled
+            spriteRenderer.enabled = true;
+
+            // If sprite is null, try to assign one
+            if (spriteRenderer.sprite == null && arrowSprite != null)
+            {
+                spriteRenderer.sprite = arrowSprite;
+            }
+        }
+
+        // Initialize arrow
+        Arrow arrow = arrowObject.GetComponent<Arrow>();
         if (arrow != null)
         {
             arrow.Initialize(directionToPlayer, transform.position);
+        }
+        else
+        {
+            Debug.LogError("Arrow component not found on instantiated arrow!");
         }
 
         // Play sound
@@ -106,26 +121,7 @@ public class Enemy_Archer : MonoBehaviour
         {
             audioSource.PlayOneShot(shootSound);
         }
-    }
 
-    // Animation event to return to idle after attack
-    public void ReturnToIdle()
-    {
-        if (animator != null)
-        {
-            animator.CrossFade(animIdle, 0);
-        }
-    }
-
-    // Draw gizmos for easier editor visualization
-    private void OnDrawGizmosSelected()
-    {
-        // Draw an arrow to show the firing direction
-        if (Application.isPlaying && playerTransform != null)
-        {
-            Gizmos.color = Color.red;
-            Vector3 direction = (playerTransform.position - transform.position).normalized;
-            Gizmos.DrawRay(transform.position, direction * 2f);
-        }
+        Debug.Log($"Created arrow at {arrowSpawnPoint.position} with direction {directionToPlayer}");
     }
 }
