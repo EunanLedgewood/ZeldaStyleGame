@@ -12,7 +12,9 @@ public class Player_Health : MonoBehaviour
     [SerializeField] private float knockbackForce = 5f;
 
     [Header("UI References")]
-    [SerializeField] private GameObject[] heartObjects; // Assign your heart UI objects here
+    [SerializeField] private GameObject[] heartObjects; // Full heart objects
+    [SerializeField] private Sprite fullHeartSprite; // Sprite for full heart
+    [SerializeField] private Sprite emptyHeartSprite; // Sprite for empty heart
     [SerializeField] private GameObject gameOverPanel; // Create a Game Over UI panel
 
     [Header("Audio")]
@@ -130,13 +132,26 @@ public class Player_Health : MonoBehaviour
         {
             for (int i = 0; i < heartObjects.Length; i++)
             {
-                if (i < currentHealth)
+                if (heartObjects[i] != null)
                 {
-                    heartObjects[i].SetActive(true);
-                }
-                else
-                {
-                    heartObjects[i].SetActive(false);
+                    Image heartImage = heartObjects[i].GetComponent<Image>();
+                    if (heartImage != null)
+                    {
+                        // Check if this heart should be full or empty
+                        // Starting from the LEFT side (index 0) to ensure hearts deplete from right to left
+                        if (i < currentHealth)
+                        {
+                            heartImage.sprite = fullHeartSprite;
+                        }
+                        else
+                        {
+                            heartImage.sprite = emptyHeartSprite;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Heart object at index " + i + " doesn't have an Image component!");
+                    }
                 }
             }
         }
