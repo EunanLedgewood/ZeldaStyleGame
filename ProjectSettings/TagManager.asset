@@ -71,3 +71,6 @@ TagManager:
   - name: Box
     uniqueID: 255887341
     locked: 0
+  - name: Pause/Health
+    uniqueID: 2474765161
+    locked: 0

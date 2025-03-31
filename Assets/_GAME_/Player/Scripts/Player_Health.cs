@@ -23,6 +23,7 @@ public class Player_Health : MonoBehaviour
 
     private int currentHealth;
     private bool isInvincible = false;
+    private bool isDead = false;
     private Rigidbody2D rb;
     private Player_Controller playerController;
     private AudioSource audioSource;
@@ -48,11 +49,12 @@ public class Player_Health : MonoBehaviour
     {
         currentHealth = maxHealth;
         UpdateHealthUI();
+        isDead = false;
     }
 
     public void TakeDamage(int damageAmount, Vector2 damageSource)
     {
-        if (isInvincible) return;
+        if (isInvincible || isDead) return;
 
         currentHealth -= damageAmount;
 
@@ -159,9 +161,33 @@ public class Player_Health : MonoBehaviour
 
     private void Die()
     {
-        // Play game over sound
+        if (isDead) return; // Prevent multiple calls
+        isDead = true;
+
+        // Stop any currently playing sounds
+        if (audioSource != null)
+        {
+            audioSource.Stop(); // Stop any currently playing sounds
+        }
+
+        // Stop all other audio sources in the scene
+        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
+        foreach (AudioSource source in allAudioSources)
+        {
+            // Stop all other audio sources
+            if (source != audioSource)
+            {
+                source.Stop();
+            }
+        }
+
+        // Disable all active enemies and arrows
+        DisableEnemiesAndArrows();
+
+        // Play game over sound once
         if (gameOverSound != null && audioSource != null)
         {
+            audioSource.loop = false; // Ensure it doesn't loop
             audioSource.PlayOneShot(gameOverSound);
         }
 
@@ -199,10 +225,49 @@ public class Player_Health : MonoBehaviour
         // SceneManager.LoadScene("GameOverScene");
     }
 
+    // Disable all enemies and arrows in the scene
+    private void DisableEnemiesAndArrows()
+    {
+        // Disable all arrows
+        GameObject[] arrows = GameObject.FindGameObjectsWithTag("Arrow");
+        foreach (GameObject arrow in arrows)
+        {
+            // Disable instead of destroy to prevent any particle effects or sounds from being cut off
+            arrow.SetActive(false);
+        }
+
+        // Find and disable any enemy behavior scripts
+        // This is a generic approach - adjust the actual component type based on your enemy scripts
+        MonoBehaviour[] enemyScripts = FindObjectsOfType<MonoBehaviour>();
+        foreach (MonoBehaviour script in enemyScripts)
+        {
+            // Check if the script name contains "Enemy" or "Archer" or any identifier you use
+            if (script.GetType().Name.Contains("Enemy") || script.GetType().Name.Contains("Archer"))
+            {
+                script.enabled = false;
+            }
+        }
+
+        // Another approach: if your enemies have a specific tag
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            // Disable all components that might cause the enemy to act
+            foreach (Behaviour component in enemy.GetComponents<Behaviour>())
+            {
+                if (!(component is Transform)) // Don't disable the Transform component
+                {
+                    component.enabled = false;
+                }
+            }
+        }
+    }
+
     // Public method to reset health (can be called when restarting level)
     public void ResetHealth()
     {
         currentHealth = maxHealth;
+        isDead = false;
         UpdateHealthUI();
     }
 

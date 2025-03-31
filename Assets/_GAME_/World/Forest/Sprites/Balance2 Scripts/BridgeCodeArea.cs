@@ -197,18 +197,10 @@ public class BridgeCodeArea : MonoBehaviour
     private IEnumerator LoadNextLevelAfterDelay()
     {
         Debug.Log("Waiting before loading next level...");
-        yield return new WaitForSeconds(1f); // Changed to 1 second as requested
+        yield return new WaitForSeconds(1f); // 1 second delay
 
-        Debug.Log("Loading next level...");
-        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-        {
-            SceneManager.LoadScene(nextSceneIndex);
-        }
-        else
-        {
-            Debug.Log("No more levels!");
-        }
+        Debug.Log("Loading Balance3 level...");
+        SceneManager.LoadScene("Balance3");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

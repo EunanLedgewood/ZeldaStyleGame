@@ -4,13 +4,17 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private Slot[] slots;
+
+    [Header("Debug")]
+    [SerializeField] private bool verboseLogging = true;
+    [SerializeField] private KeyCode forceCompleteKey = KeyCode.F; // Force complete level for testing
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -24,31 +28,41 @@ public class GameManager : MonoBehaviour
         // Cheat: Skip to the next level when "M" is pressed
         if (Input.GetKeyDown(KeyCode.M))
         {
-            Debug.Log("Cheat activated: Skipping to next level");
+            if (verboseLogging) Debug.Log("Cheat activated: Skipping to next level");
             LoadNextLevel();
+        }
+
+        // Force complete level with F key (for testing)
+        if (Input.GetKeyDown(forceCompleteKey))
+        {
+            if (verboseLogging) Debug.Log("Force completing level (debug)");
+            ForceCheckAllSlots();
         }
     }
 
-    private void Start()
-    {
-        // Find all slots in the scene when the level starts
-        RefreshSlotsList();
-    }
-
-    // This method refreshes the list of all slots in the scene
-    public void RefreshSlotsList()
-    {
-        slots = FindObjectsOfType<Slot>();
-        Debug.Log($"GameManager found {slots.Length} slots in the scene");
-    }
-
+    // Public method for Slot to call when filled
     public void CheckAllSlotsFilled()
     {
-        // Make sure we have the latest slots collection
-        RefreshSlotsList();
+        // Use Invoke to ensure this runs after the current frame
+        // This allows any other slot-related operations to complete first
+        Invoke("PerformSlotCheck", 0.1f);
+    }
+
+    // Direct check for debugging
+    private void ForceCheckAllSlots()
+    {
+        PerformSlotCheck();
+    }
+
+    private void PerformSlotCheck()
+    {
+        // Find all slots in the scene
+        Slot[] allSlots = FindObjectsOfType<Slot>();
+
+        if (verboseLogging) Debug.Log($"GameManager found {allSlots.Length} slots in the scene");
 
         // If no slots are found, something's wrong
-        if (slots.Length == 0)
+        if (allSlots.Length == 0)
         {
             Debug.LogWarning("No slots found in the scene!");
             return;
@@ -56,20 +70,25 @@ public class GameManager : MonoBehaviour
 
         // Count how many slots are filled
         int filledCount = 0;
-        foreach (Slot slot in slots)
+        foreach (Slot slot in allSlots)
         {
             if (slot.IsFilled())
             {
                 filledCount++;
+                if (verboseLogging) Debug.Log($"Slot {slot.slotColor} is filled");
+            }
+            else
+            {
+                if (verboseLogging) Debug.Log($"Slot {slot.slotColor} is NOT filled");
             }
         }
 
-        Debug.Log($"Slot check: {filledCount}/{slots.Length} slots filled");
+        if (verboseLogging) Debug.Log($"SLOT CHECK: {filledCount}/{allSlots.Length} slots filled");
 
         // Only proceed to next level if ALL slots are filled
-        if (filledCount == slots.Length)
+        if (filledCount == allSlots.Length)
         {
-            Debug.Log("All boxes placed! Loading next level...");
+            Debug.Log("?? ALL BOXES PLACED! Loading next level... ??");
             Invoke("LoadNextLevel", 1f); // Delay before loading next level
         }
     }
@@ -81,13 +100,13 @@ public class GameManager : MonoBehaviour
         // Make sure the next scene exists
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
+            Debug.Log($"Loading next level: Scene index {nextSceneIndex}");
             SceneManager.LoadScene(nextSceneIndex);
         }
         else
         {
-            // If there's no next scene, you could load a "game complete" scene or the main menu
             Debug.Log("No more levels available!");
-            // Optionally load first scene or a specific scene:
+            // Optionally load first scene or a specific scene
             // SceneManager.LoadScene(0);
         }
     }
