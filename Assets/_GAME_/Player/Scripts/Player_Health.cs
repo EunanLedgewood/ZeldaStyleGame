@@ -12,9 +12,7 @@ public class Player_Health : MonoBehaviour
     [SerializeField] private float knockbackForce = 5f;
 
     [Header("UI References")]
-    [SerializeField] private GameObject[] heartObjects; // Full heart objects
-    [SerializeField] private Sprite fullHeartSprite; // Sprite for full heart
-    [SerializeField] private Sprite emptyHeartSprite; // Sprite for empty heart
+    [SerializeField] private GameObject[] heartObjects; // Assign your heart UI objects here
     [SerializeField] private GameObject gameOverPanel; // Create a Game Over UI panel
 
     [Header("Audio")]
@@ -23,10 +21,10 @@ public class Player_Health : MonoBehaviour
 
     private int currentHealth;
     private bool isInvincible = false;
-    private bool isDead = false;
     private Rigidbody2D rb;
     private Player_Controller playerController;
     private AudioSource audioSource;
+    private bool isGameOver = false;
 
     private void Awake()
     {
@@ -49,12 +47,12 @@ public class Player_Health : MonoBehaviour
     {
         currentHealth = maxHealth;
         UpdateHealthUI();
-        isDead = false;
+        isGameOver = false;
     }
 
     public void TakeDamage(int damageAmount, Vector2 damageSource)
     {
-        if (isInvincible || isDead) return;
+        if (isInvincible || isGameOver) return;
 
         currentHealth -= damageAmount;
 
@@ -134,26 +132,13 @@ public class Player_Health : MonoBehaviour
         {
             for (int i = 0; i < heartObjects.Length; i++)
             {
-                if (heartObjects[i] != null)
+                if (i < currentHealth)
                 {
-                    Image heartImage = heartObjects[i].GetComponent<Image>();
-                    if (heartImage != null)
-                    {
-                        // Check if this heart should be full or empty
-                        // Starting from the LEFT side (index 0) to ensure hearts deplete from right to left
-                        if (i < currentHealth)
-                        {
-                            heartImage.sprite = fullHeartSprite;
-                        }
-                        else
-                        {
-                            heartImage.sprite = emptyHeartSprite;
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("Heart object at index " + i + " doesn't have an Image component!");
-                    }
+                    heartObjects[i].SetActive(true);
+                }
+                else
+                {
+                    heartObjects[i].SetActive(false);
                 }
             }
         }
@@ -161,34 +146,19 @@ public class Player_Health : MonoBehaviour
 
     private void Die()
     {
-        if (isDead) return; // Prevent multiple calls
-        isDead = true;
+        isGameOver = true;
 
-        // Stop any currently playing sounds
-        if (audioSource != null)
-        {
-            audioSource.Stop(); // Stop any currently playing sounds
-        }
-
-        // Stop all other audio sources in the scene
-        AudioSource[] allAudioSources = FindObjectsOfType<AudioSource>();
-        foreach (AudioSource source in allAudioSources)
-        {
-            // Stop all other audio sources
-            if (source != audioSource)
-            {
-                source.Stop();
-            }
-        }
-
-        // Disable all active enemies and arrows
-        DisableEnemiesAndArrows();
-
-        // Play game over sound once
+        // Play game over sound
         if (gameOverSound != null && audioSource != null)
         {
-            audioSource.loop = false; // Ensure it doesn't loop
             audioSource.PlayOneShot(gameOverSound);
+        }
+
+        // Switch to game over music (one time play) and notify enemies
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.PlayGameOverMusic();
+            // Note: PlayGameOverMusic now handles broadcasting to enemies
         }
 
         // Disable player controller
@@ -225,55 +195,25 @@ public class Player_Health : MonoBehaviour
         // SceneManager.LoadScene("GameOverScene");
     }
 
-    // Disable all enemies and arrows in the scene
-    private void DisableEnemiesAndArrows()
-    {
-        // Disable all arrows
-        GameObject[] arrows = GameObject.FindGameObjectsWithTag("Arrow");
-        foreach (GameObject arrow in arrows)
-        {
-            // Disable instead of destroy to prevent any particle effects or sounds from being cut off
-            arrow.SetActive(false);
-        }
-
-        // Find and disable any enemy behavior scripts
-        // This is a generic approach - adjust the actual component type based on your enemy scripts
-        MonoBehaviour[] enemyScripts = FindObjectsOfType<MonoBehaviour>();
-        foreach (MonoBehaviour script in enemyScripts)
-        {
-            // Check if the script name contains "Enemy" or "Archer" or any identifier you use
-            if (script.GetType().Name.Contains("Enemy") || script.GetType().Name.Contains("Archer"))
-            {
-                script.enabled = false;
-            }
-        }
-
-        // Another approach: if your enemies have a specific tag
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            // Disable all components that might cause the enemy to act
-            foreach (Behaviour component in enemy.GetComponents<Behaviour>())
-            {
-                if (!(component is Transform)) // Don't disable the Transform component
-                {
-                    component.enabled = false;
-                }
-            }
-        }
-    }
-
     // Public method to reset health (can be called when restarting level)
     public void ResetHealth()
     {
         currentHealth = maxHealth;
-        isDead = false;
         UpdateHealthUI();
+        isGameOver = false;
+
+        // Restore normal background music
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.RestoreBackgroundMusic();
+        }
     }
 
     // Add this to the player GameObject to detect collisions with arrows
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (isGameOver) return; // Don't process collisions if game is over
+
         Debug.Log("Player_Health OnTriggerEnter2D with: " + other.gameObject.name + " (Tag: " + other.gameObject.tag + ")");
 
         if (other.CompareTag("Arrow"))

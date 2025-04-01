@@ -88,6 +88,7 @@
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\ClueBox.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\Game Over Manager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Balance2 Scripts\ClueBoxSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\_GAME_\PreFabs\Characters\Enemy\Enemy Archer.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\PauseMenuManager.cs" />
     <Compile Include="Assets\MainMenu.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\LevelRevealManager.cs" />

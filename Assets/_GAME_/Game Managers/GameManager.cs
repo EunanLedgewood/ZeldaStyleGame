@@ -9,12 +9,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool verboseLogging = true;
     [SerializeField] private KeyCode forceCompleteKey = KeyCode.F; // Force complete level for testing
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip backgroundMusic;
+    [SerializeField] private AudioClip gameOverMusic;
+    [SerializeField] private float musicVolume = 0.5f;
+    [SerializeField] private bool playMusicOnAwake = true;
+    private AudioSource musicSource;
+
+    [Header("Game State")]
+    public bool isGameOver = false;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Set up background music
+            SetupBackgroundMusic();
         }
         else
         {
@@ -23,8 +36,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void SetupBackgroundMusic()
+    {
+        // Create audio source for music
+        musicSource = gameObject.AddComponent<AudioSource>();
+        musicSource.clip = backgroundMusic;
+        musicSource.volume = musicVolume;
+        musicSource.loop = true;
+
+        // Start playing if setting is enabled
+        if (playMusicOnAwake && backgroundMusic != null)
+        {
+            musicSource.Play();
+        }
+    }
+
     private void Update()
     {
+        // Don't allow cheats if game is over
+        if (isGameOver) return;
+
         // Cheat: Skip to the next level when "M" is pressed
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -43,6 +74,9 @@ public class GameManager : MonoBehaviour
     // Public method for Slot to call when filled
     public void CheckAllSlotsFilled()
     {
+        // Don't check if game is over
+        if (isGameOver) return;
+
         // Use Invoke to ensure this runs after the current frame
         // This allows any other slot-related operations to complete first
         Invoke("PerformSlotCheck", 0.1f);
@@ -109,5 +143,122 @@ public class GameManager : MonoBehaviour
             // Optionally load first scene or a specific scene
             // SceneManager.LoadScene(0);
         }
+    }
+
+    // Music control methods
+
+    public void PauseMusic()
+    {
+        if (musicSource != null && musicSource.isPlaying)
+        {
+            musicSource.Pause();
+            Debug.Log("Background music paused");
+        }
+    }
+
+    public void ResumeMusic()
+    {
+        if (musicSource != null && !musicSource.isPlaying)
+        {
+            musicSource.UnPause();
+            Debug.Log("Background music resumed");
+        }
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        if (musicSource != null)
+        {
+            musicSource.volume = Mathf.Clamp01(volume);
+            musicVolume = musicSource.volume;
+        }
+    }
+
+    public void StopMusic()
+    {
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+        }
+    }
+
+    public void PlayMusic(AudioClip music = null)
+    {
+        if (musicSource != null)
+        {
+            // If a new music clip is provided, switch to it
+            if (music != null && music != musicSource.clip)
+            {
+                musicSource.clip = music;
+            }
+            else if (music == null && backgroundMusic != null)
+            {
+                // Default to background music if no clip specified
+                musicSource.clip = backgroundMusic;
+            }
+
+            if (musicSource.clip != null)
+            {
+                musicSource.Play();
+            }
+        }
+    }
+
+    // Call this when player dies or game over screen appears
+    public void PlayGameOverMusic()
+    {
+        if (musicSource != null && gameOverMusic != null)
+        {
+            // Set game over state
+            isGameOver = true;
+
+            // Stop any currently playing music
+            musicSource.Stop();
+
+            // Switch to game over music and play ONCE (no loop)
+            musicSource.clip = gameOverMusic;
+            musicSource.loop = false; // Only play once
+            musicSource.Play();
+
+            Debug.Log("Playing game over music (once)");
+
+            // Broadcast game over state to all enemies
+            BroadcastGameOver();
+        }
+    }
+
+    // Call this to restore the normal background music
+    public void RestoreBackgroundMusic()
+    {
+        // Reset game over state
+        isGameOver = false;
+
+        if (musicSource != null && backgroundMusic != null)
+        {
+            // Stop any currently playing music
+            musicSource.Stop();
+
+            // Switch back to normal background music
+            musicSource.clip = backgroundMusic;
+            musicSource.loop = true;
+            musicSource.Play();
+
+            Debug.Log("Restored normal background music");
+        }
+    }
+
+    // Notify all enemies that the game is over
+    private void BroadcastGameOver()
+    {
+        // Find all enemy archers
+        Enemy_Archer[] enemies = FindObjectsOfType<Enemy_Archer>();
+
+        // Notify each one
+        foreach (Enemy_Archer enemy in enemies)
+        {
+            enemy.OnGameOver();
+        }
+
+        Debug.Log($"Game over broadcast to {enemies.Length} enemies");
     }
 }
