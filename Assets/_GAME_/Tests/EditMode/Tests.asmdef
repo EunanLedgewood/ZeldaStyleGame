@@ -4,7 +4,11 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "NewAssembly"
+        "NewAssembly",
+        "Unity.TextMeshPro",
+        "GameManagers",
+        "UnityEngine.UI",
+        "NPC"
     ],
     "includePlatforms": [
         "Editor"
@@ -15,7 +19,7 @@
     "precompiledReferences": [
         "nunit.framework.dll"
     ],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

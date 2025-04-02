@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "NewAssembly",
         "GameManagers",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "NPC"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
