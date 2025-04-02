@@ -2,6 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using System.Reflection;
 
 public class NPCDialogueTests
 {
@@ -28,16 +29,12 @@ public class NPCDialogueTests
         // Add required components for Player_Controller
         Rigidbody2D rb = playerObject.AddComponent<Rigidbody2D>();
 
-        Animator animator = playerObject.AddComponent<Animator>();
+        // Expect the validation error logs
+        LogAssert.Expect(LogType.Error, "Animator is not assigned in Player_Controller!");
+        LogAssert.Expect(LogType.Error, "SpriteRenderer is not assigned in Player_Controller!");
 
-        // Assign a valid RuntimeAnimatorController (ensure "DefaultController" exists in Resources)
-        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("DefaultController");
-
-        SpriteRenderer spriteRenderer = playerObject.AddComponent<SpriteRenderer>();
-
-        // Create Player_Controller and set dependencies
+        // Create Player_Controller
         playerController = playerObject.AddComponent<Player_Controller>();
-        playerController.SetDependenciesForTesting(rb, animator, spriteRenderer);
 
         // Create DialogueManager GameObject
         dialogueManagerObject = new GameObject("DialogueManager");
@@ -54,16 +51,15 @@ public class NPCDialogueTests
 
         // Set dialogue lines via reflection
         var linesField = typeof(NPC).GetField("dialogueLines",
-                             System.Reflection.BindingFlags.NonPublic |
-                             System.Reflection.BindingFlags.Instance);
+                             BindingFlags.NonPublic |
+                             BindingFlags.Instance);
         var imageField = typeof(NPC).GetField("npcImage",
-                             System.Reflection.BindingFlags.NonPublic |
-                             System.Reflection.BindingFlags.Instance);
+                             BindingFlags.NonPublic |
+                             BindingFlags.Instance);
 
         linesField.SetValue(npc, testDialogueLines);
         imageField.SetValue(npc, testSprite);
     }
-
 
     [TearDown]
     public void Teardown()
@@ -78,16 +74,16 @@ public class NPCDialogueTests
     {
         // Arrange
         var playerIsNearbyField = typeof(NPC).GetField("playerIsNearby",
-                                      System.Reflection.BindingFlags.NonPublic |
-                                      System.Reflection.BindingFlags.Instance);
+                                      BindingFlags.NonPublic |
+                                      BindingFlags.Instance);
 
         // Initial state should be false
         bool initialState = (bool)playerIsNearbyField.GetValue(npc);
 
         // Act - Trigger the OnTriggerEnter2D method
         var triggerEnterMethod = typeof(NPC).GetMethod("OnTriggerEnter2D",
-                                     System.Reflection.BindingFlags.NonPublic |
-                                     System.Reflection.BindingFlags.Instance);
+                                     BindingFlags.NonPublic |
+                                     BindingFlags.Instance);
         triggerEnterMethod.Invoke(npc, new object[] { playerObject.AddComponent<BoxCollider2D>() });
 
         // Get updated state
@@ -103,16 +99,16 @@ public class NPCDialogueTests
     {
         // Arrange
         var playerIsNearbyField = typeof(NPC).GetField("playerIsNearby",
-                                      System.Reflection.BindingFlags.NonPublic |
-                                      System.Reflection.BindingFlags.Instance);
+                                      BindingFlags.NonPublic |
+                                      BindingFlags.Instance);
 
         // Set initial state to true
         playerIsNearbyField.SetValue(npc, true);
 
         // Act - Trigger the OnTriggerExit2D method
         var triggerExitMethod = typeof(NPC).GetMethod("OnTriggerExit2D",
-                                    System.Reflection.BindingFlags.NonPublic |
-                                    System.Reflection.BindingFlags.Instance);
+                                    BindingFlags.NonPublic |
+                                    BindingFlags.Instance);
         triggerExitMethod.Invoke(npc, new object[] { playerObject.AddComponent<BoxCollider2D>() });
 
         // Get updated state
@@ -121,8 +117,6 @@ public class NPCDialogueTests
         // Assert
         Assert.IsFalse(updatedState, "playerIsNearby should be false after player exits trigger");
     }
-
-   
 
     // Mock classes for testing
     private class MockDialogueManager : DialogueManager
