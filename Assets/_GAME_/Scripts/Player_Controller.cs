@@ -21,8 +21,8 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
 
     [Header("Pushable Object")]
-    [SerializeField] private float pushStrength = 5f; // Adjusted push strength for controlled movement
-    [SerializeField] private Transform _objectToPush; // Reference to the object to be pushed
+    [SerializeField] private float pushStrength = 5f;
+    [SerializeField] private Transform _objectToPush;
 
     private Vector2 _moveDir = Vector2.zero;
     private Directions _facingDirection = Directions.RIGHT;
@@ -39,9 +39,98 @@ public class Player_Controller : MonoBehaviour
 
     private void Awake()
     {
-        if (_rb == null) Debug.LogError("Rigidbody2D is not assigned in Player_Controller!");
-        if (_animator == null) Debug.LogError("Animator is not assigned in Player_Controller!");
-        if (_spriteRenderer == null) Debug.LogError("SpriteRenderer is not assigned in Player_Controller!");
+        // Try to find components automatically if not manually assigned
+        FindAndAssignComponents();
+        ValidateDependencies();
+    }
+
+    // Method to automatically find and assign components
+    private void FindAndAssignComponents()
+    {
+        // If Rigidbody2D is not assigned, try to find it on this object or its children
+        if (_rb == null)
+        {
+            _rb = GetComponent<Rigidbody2D>();
+            if (_rb == null)
+            {
+                _rb = GetComponentInChildren<Rigidbody2D>();
+            }
+        }
+
+        // If Animator is not assigned, look for it on this object or its children
+        if (_animator == null)
+        {
+            _animator = GetComponent<Animator>();
+            if (_animator == null)
+            {
+                // Try to find Animator on children
+                _animator = GetComponentInChildren<Animator>();
+
+                // If still not found, look specifically in the Character child
+                if (_animator == null)
+                {
+                    Transform characterChild = transform.Find("Character");
+                    if (characterChild != null)
+                    {
+                        _animator = characterChild.GetComponent<Animator>();
+                    }
+                }
+            }
+        }
+
+        // If SpriteRenderer is not assigned, look for it on this object or its children
+        if (_spriteRenderer == null)
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            if (_spriteRenderer == null)
+            {
+                _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+                // If still not found, look specifically in the Character child
+                if (_spriteRenderer == null)
+                {
+                    Transform characterChild = transform.Find("Character");
+                    if (characterChild != null)
+                    {
+                        _spriteRenderer = characterChild.GetComponent<SpriteRenderer>();
+                    }
+                }
+            }
+        }
+    }
+
+    // Public method to validate dependencies (useful for unit testing)
+    public bool ValidateDependencies()
+    {
+        bool hasErrors = false;
+
+        if (_rb == null)
+        {
+            Debug.LogError("Rigidbody2D is not assigned in Player_Controller!");
+            hasErrors = true;
+        }
+
+        if (_animator == null)
+        {
+            Debug.LogError("Animator is not assigned in Player_Controller!");
+            hasErrors = true;
+        }
+
+        if (_spriteRenderer == null)
+        {
+            Debug.LogError("SpriteRenderer is not assigned in Player_Controller!");
+            hasErrors = true;
+        }
+
+        return !hasErrors;
+    }
+
+    // Public method to manually set dependencies for testing
+    public void SetDependenciesForTesting(Rigidbody2D rb, Animator animator, SpriteRenderer spriteRenderer)
+    {
+        _rb = rb;
+        _animator = animator;
+        _spriteRenderer = spriteRenderer;
     }
 
     private void Start()

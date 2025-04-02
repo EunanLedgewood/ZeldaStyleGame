@@ -63,9 +63,13 @@
     <Compile Include="Assets\_GAME_\Game Managers\ControlsDisplayManager.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\GameManager.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\Game Over Manager.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\SwordOfOrderDialogue.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\NPC.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\UI Manager.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\SwordOfBalanceDialogue.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\PauseMenuManager.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\DialogueManager.cs" />
+    <Compile Include="Assets\_GAME_\Game Managers\SwordOfChaosDialogue.cs" />
     <Compile Include="Assets\_GAME_\Game Managers\LevelRevealManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -954,6 +958,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="NewAssembly.csproj">
+      <Project>{2957EC3C-2D31-EE16-9F97-E476BDD005D7}</Project>
+      <Name>NewAssembly</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -69,7 +69,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
-    <Compile Include="Assets\_GAME_\World\Forest\Sprites\Slot Scripts\Slot.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\_GAME_\Tests\CollisionTest.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
@@ -90,9 +89,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\_GAME_\World\Forest\Sprites\Pushables Scripts\PushableSquare.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
-    <Compile Include="Assets\_GAME_\World\Forest\Sprites\Pushables Scripts\Box.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
-    <Compile Include="Assets\_GAME_\PreFabs\Characters\Enemy\Arrow.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
@@ -100,7 +97,6 @@
     <Compile Include="Assets\_GAME_\Tests\ArrowTest.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
-    <Compile Include="Assets\_GAME_\PreFabs\Characters\Enemy\Enemy Archer.cs" />
     <Compile Include="Assets\MainMenu.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
   </ItemGroup>
@@ -1142,18 +1138,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="GameManagers.csproj">
-      <Project>{65CBF422-C145-B5E8-C3A4-ECE4DE707A31}</Project>
-      <Name>GameManagers</Name>
-    </ProjectReference>
-    <ProjectReference Include="ClueBoxesNumberBoxes.csproj">
-      <Project>{0A849658-EB16-2D84-70EB-BBA64C213048}</Project>
-      <Name>ClueBoxesNumberBoxes</Name>
-    </ProjectReference>
-    <ProjectReference Include="NPC.csproj">
-      <Project>{51315487-0DE0-AB73-0E88-A4D82057044D}</Project>
-      <Name>NPC</Name>
-    </ProjectReference>
     <ProjectReference Include="PlayMode.csproj">
       <Project>{5928AE4B-BD00-2ECF-B382-D1149CE14E22}</Project>
       <Name>PlayMode</Name>

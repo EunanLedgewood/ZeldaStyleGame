@@ -60,7 +60,11 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.48f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\_GAME_\Tests\PlayMode\BoxAndSlotTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\PlayMode\PlayerHealthTest.cs" />
+    <Compile Include="Assets\_GAME_\Tests\PlayMode\NPCDialogueTests.cs" />
+    <Compile Include="Assets\_GAME_\Tests\PlayMode\LevelRevealManagerTests.cs" />
+    <Compile Include="Assets\_GAME_\Tests\PlayMode\NumberBoxClueBoxTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\_GAME_\Tests\PlayMode\PlayMode.asmdef" />
@@ -915,14 +919,6 @@
     <ProjectReference Include="NewAssembly.csproj">
       <Project>{2957EC3C-2D31-EE16-9F97-E476BDD005D7}</Project>
       <Name>NewAssembly</Name>
-    </ProjectReference>
-    <ProjectReference Include="GameManagers.csproj">
-      <Project>{65CBF422-C145-B5E8-C3A4-ECE4DE707A31}</Project>
-      <Name>GameManagers</Name>
-    </ProjectReference>
-    <ProjectReference Include="NPC.csproj">
-      <Project>{51315487-0DE0-AB73-0E88-A4D82057044D}</Project>
-      <Name>NPC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
