@@ -62,8 +62,8 @@
   <ItemGroup>
     <Compile Include="Assets\_GAME_\Scripts\PauseMenuManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ClueBoxSpawner.cs" />
-    <Compile Include="Assets\_GAME_\Scripts\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\BridgeCodeArea.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Box.cs" />
     <Compile Include="Assets\_GAME_\Scripts\GameManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\NumberBox.cs" />

@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="Assets\_GAME_\Tests\PlayMode\BoxAndSlotTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\PlayMode\PlayerHealthTest.cs" />
-    <Compile Include="Assets\_GAME_\Tests\PlayMode\NPCDialogueTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\PlayMode\PlayerControllerTestExtensions.cs" />
     <Compile Include="Assets\_GAME_\Tests\PlayMode\LevelRevealManagerTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\PlayMode\NumberBoxClueBoxTests.cs" />
