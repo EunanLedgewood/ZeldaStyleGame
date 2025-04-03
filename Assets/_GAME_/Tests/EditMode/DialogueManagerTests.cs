@@ -24,6 +24,8 @@ public class DialogueManagerTests
     [SetUp]
     public void Setup()
     {
+        Debug.Log("Setting up test environment");
+
         // Create objects
         dialogueManagerObj = new GameObject("DialogueManager");
 
@@ -59,11 +61,22 @@ public class DialogueManagerTests
         dialogueLinesFromEvent = null;
         spriteFromEvent = null;
 
-        dialogueManager.OnDialogueStarted += () => dialogueStartEventFired = true;
-        dialogueManager.OnDialogueEnd += () => dialogueEndEventFired = true;
+        dialogueManager.OnDialogueStarted += () => {
+            dialogueStartEventFired = true;
+            Debug.Log("Dialogue started event fired");
+        };
+        dialogueManager.OnDialogueEnd += () => {
+            dialogueEndEventFired = true;
+            Debug.Log("Dialogue ended event fired");
+        };
         dialogueManager.OnSetDialogueLines += (lines, sprite) => {
             dialogueLinesFromEvent = lines;
             spriteFromEvent = sprite;
+            Debug.Log($"Dialogue lines set: {string.Join(", ", lines)}");
+            if (sprite != null)
+                Debug.Log("NPC sprite set: " + sprite.name);
+            else
+                Debug.Log("No NPC sprite set");
         };
 
         // Initialize (calls Start)
@@ -73,12 +86,15 @@ public class DialogueManagerTests
     [TearDown]
     public void TearDown()
     {
+        Debug.Log("Tearing down test environment");
         Object.DestroyImmediate(dialogueManagerObj);
     }
 
     [Test]
     public void SetDialogueLines_SetsLinesAndSprite()
     {
+        Debug.Log("Running SetDialogueLines_SetsLinesAndSprite test");
+
         // Arrange
         string[] testLines = new string[] { "Line 1", "Line 2", "Line 3" };
         Sprite testSprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 1, 1), Vector2.zero);
@@ -95,6 +111,8 @@ public class DialogueManagerTests
     [Test]
     public void SetDialogueLines_HandlesNullSprite()
     {
+        Debug.Log("Running SetDialogueLines_HandlesNullSprite test");
+
         // Arrange
         string[] testLines = new string[] { "Line 1", "Line 2", "Line 3" };
 
@@ -110,6 +128,8 @@ public class DialogueManagerTests
     [Test]
     public void StartDialogue_ShowsPanelAndFiresEvent()
     {
+        Debug.Log("Running StartDialogue_ShowsPanelAndFiresEvent test");
+
         // Arrange
         string[] testLines = new string[] { "Line 1", "Line 2", "Line 3" };
         dialogueManager.SetDialogueLines(testLines, null);
@@ -129,6 +149,8 @@ public class DialogueManagerTests
     [Test]
     public void StartDialogue_HandlesEmptyLines()
     {
+        Debug.Log("Running StartDialogue_HandlesEmptyLines test");
+
         // Arrange - don't set any dialogue lines
 
         // Act
@@ -142,6 +164,8 @@ public class DialogueManagerTests
     [Test]
     public void DisplayNextLine_AdvancesToNextLine()
     {
+        Debug.Log("Running DisplayNextLine_AdvancesToNextLine test");
+
         // Arrange
         string[] testLines = new string[] { "Line 1", "Line 2", "Line 3" };
         dialogueManager.SetDialogueLines(testLines, null);
@@ -158,6 +182,8 @@ public class DialogueManagerTests
     [Test]
     public void DisplayNextLine_EndsDialogueAtLastLine()
     {
+        Debug.Log("Running DisplayNextLine_EndsDialogueAtLastLine test");
+
         // Arrange
         string[] testLines = new string[] { "Line 1", "Line 2" };
         dialogueManager.SetDialogueLines(testLines, null);
@@ -177,6 +203,8 @@ public class DialogueManagerTests
     [Test]
     public void EndDialogue_HidesPanelAndFiresEvent()
     {
+        Debug.Log("Running EndDialogue_HidesPanelAndFiresEvent test");
+
         // Arrange
         string[] testLines = new string[] { "Line 1", "Line 2", "Line 3" };
         dialogueManager.SetDialogueLines(testLines, null);

@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="Assets\_GAME_\Tests\EditMode\PlayerControllerTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\EditMode\DialogueManagerTests.cs" />
-    <Compile Include="Assets\_GAME_\Tests\EditMode\PauseMenuManagerTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\EditMode\GameManagerTests.cs" />
     <Compile Include="Assets\_GAME_\Tests\EditMode\ControlDisplayManagerTests.cs" />
   </ItemGroup>

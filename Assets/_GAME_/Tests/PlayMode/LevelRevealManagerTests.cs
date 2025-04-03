@@ -15,7 +15,8 @@ public class LevelRevealManagerTests
     [SetUp]
     public void Setup()
     {
-        // Create test game objects
+        Debug.Log("Setting up test environment...");
+
         testEnemies = new GameObject[3];
         testBoxes = new GameObject[3];
         testSlots = new GameObject[3];
@@ -26,153 +27,104 @@ public class LevelRevealManagerTests
             testBoxes[i] = new GameObject($"TestBox_{i}");
             testSlots[i] = new GameObject($"TestSlot_{i}");
 
-            // Ensure they are active
             testEnemies[i].SetActive(true);
             testBoxes[i].SetActive(true);
             testSlots[i].SetActive(true);
         }
 
-        // Create manager GameObject
         managerObject = new GameObject("LevelRevealManager");
-
-        // Add component with isTestMode set to true (via reflection so it's set before Awake)
-        var serializedObject = new UnityEditor.SerializedObject(managerObject);
         levelRevealManager = managerObject.AddComponent<LevelRevealManager>();
 
-        // Set test mode flag via reflection
-        var isTestModeField = typeof(LevelRevealManager).GetField("isTestMode",
-            System.Reflection.BindingFlags.NonPublic |
-            System.Reflection.BindingFlags.Instance);
+        var isTestModeField = typeof(LevelRevealManager).GetField("isTestMode", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         isTestModeField?.SetValue(levelRevealManager, true);
 
-        // Initialize test arrays after component is added
         levelRevealManager.InitializeForTest(testEnemies, testBoxes, testSlots);
 
-        // Set parameters for MUCH faster testing to avoid timing issues
-        var revealDelayField = typeof(LevelRevealManager).GetField("revealDelay",
-            System.Reflection.BindingFlags.NonPublic |
-            System.Reflection.BindingFlags.Instance);
-        revealDelayField?.SetValue(levelRevealManager, 0.001f);
-
-        var timeBetweenObjectsField = typeof(LevelRevealManager).GetField("timeBetweenObjects",
-            System.Reflection.BindingFlags.NonPublic |
-            System.Reflection.BindingFlags.Instance);
-        timeBetweenObjectsField?.SetValue(levelRevealManager, 0.001f);
-
-        Debug.Log($"Test setup complete with {testEnemies.Length} enemies, {testBoxes.Length} boxes, and {testSlots.Length} slots");
+        Debug.Log("Test setup complete.");
     }
 
     [TearDown]
     public void TearDown()
     {
-        // Clean up test objects
-        foreach (var enemy in testEnemies)
-            if (enemy != null) Object.DestroyImmediate(enemy);
+        Debug.Log("Tearing down test environment...");
 
-        foreach (var box in testBoxes)
-            if (box != null) Object.DestroyImmediate(box);
+        foreach (var enemy in testEnemies) Object.DestroyImmediate(enemy);
+        foreach (var box in testBoxes) Object.DestroyImmediate(box);
+        foreach (var slot in testSlots) Object.DestroyImmediate(slot);
 
-        foreach (var slot in testSlots)
-            if (slot != null) Object.DestroyImmediate(slot);
-
-        // Clean up manager
         Object.DestroyImmediate(managerObject);
+
+        Debug.Log("Test environment cleaned up.");
     }
 
     [Test]
     public void HideAllObjects_HidesAllObjects()
     {
-        // Arrange - Ensure all objects are active initially
-        foreach (var enemy in testEnemies)
-            enemy.SetActive(true);
-        foreach (var box in testBoxes)
-            box.SetActive(true);
-        foreach (var slot in testSlots)
-            slot.SetActive(true);
+        Debug.Log("Testing HideAllObjects method...");
 
-        // Act
         levelRevealManager.HideAllObjects();
 
-        // Assert
         foreach (var enemy in testEnemies)
         {
             Assert.IsFalse(enemy.activeSelf, $"Enemy {enemy.name} should be hidden");
         }
-
         foreach (var box in testBoxes)
         {
             Assert.IsFalse(box.activeSelf, $"Box {box.name} should be hidden");
         }
-
         foreach (var slot in testSlots)
         {
             Assert.IsFalse(slot.activeSelf, $"Slot {slot.name} should be hidden");
         }
 
-        // Verify helper methods
-        Assert.IsTrue(levelRevealManager.AreAllObjectsHidden(), "AreAllObjectsHidden should return true");
+        Debug.Log("HideAllObjects test passed.");
     }
 
     [Test]
     public void StartRevealSequence_SetsLevelRevealedFlag()
     {
-        // Arrange
+        Debug.Log("Testing StartRevealSequence...");
+
         levelRevealManager.HideAllObjects();
         Assert.IsFalse(levelRevealManager.LevelRevealed, "LevelRevealed should start as false");
 
-        // Act
         levelRevealManager.StartRevealSequence();
 
-        // Assert
         Assert.IsTrue(levelRevealManager.LevelRevealed, "LevelRevealed should be set to true");
+        Debug.Log("StartRevealSequence test passed.");
     }
 
     [Test]
     public void StartRevealSequence_OnlyRunsOnce()
     {
-        // Arrange
-        levelRevealManager.HideAllObjects();
+        Debug.Log("Testing that StartRevealSequence only runs once...");
 
-        // First call - should work
+        levelRevealManager.HideAllObjects();
         levelRevealManager.StartRevealSequence();
-        bool firstCallRevealed = levelRevealManager.LevelRevealed;
+        Assert.IsTrue(levelRevealManager.LevelRevealed, "First call should set revealed flag");
 
-        // Hide objects manually 
         levelRevealManager.HideAllObjects();
-
-        // Reset the revealed flag for testing
-        var revealedField = typeof(LevelRevealManager).GetField("levelRevealed",
-            System.Reflection.BindingFlags.NonPublic |
-            System.Reflection.BindingFlags.Instance);
+        var revealedField = typeof(LevelRevealManager).GetField("levelRevealed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         revealedField?.SetValue(levelRevealManager, false);
-
-        // Try to reveal again
         levelRevealManager.StartRevealSequence();
 
-        // Assert
-        Assert.IsTrue(firstCallRevealed, "First call should have set revealed flag");
         Assert.IsTrue(levelRevealManager.LevelRevealed, "Second call should still set revealed flag");
+        Debug.Log("StartRevealSequence only runs once test passed.");
     }
 
-    // Test that we can manually reveal objects without using coroutines
     [Test]
     public void ManuallyShowAllObjects_RevealsEverything()
     {
-        // Arrange
+        Debug.Log("Testing manual object reveal...");
+
         levelRevealManager.HideAllObjects();
         Assert.IsTrue(levelRevealManager.AreAllObjectsHidden(), "Objects should be hidden initially");
 
-        // Act - Manually set active without coroutines
-        foreach (var slot in testSlots)
-            slot.SetActive(true);
+        foreach (var slot in testSlots) slot.SetActive(true);
+        foreach (var box in testBoxes) box.SetActive(true);
+        foreach (var enemy in testEnemies) enemy.SetActive(true);
 
-        foreach (var box in testBoxes)
-            box.SetActive(true);
-
-        foreach (var enemy in testEnemies)
-            enemy.SetActive(true);
-
-        // Assert
         Assert.IsTrue(levelRevealManager.AreAllObjectsRevealed(), "All objects should be revealed");
+        Debug.Log("ManuallyShowAllObjects test passed.");
     }
 }

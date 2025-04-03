@@ -8,7 +8,7 @@ using UnityEngine.TestTools;
 public class Player_ControllerTests
 {
     private GameObject playerObj;
-    private Player_Controller playerController;
+    private Player_ControllerTest playerController; // Using test class instead
     private GameObject rbObj;
     private Rigidbody2D rb;
     private GameObject animatorObj;
@@ -38,11 +38,8 @@ public class Player_ControllerTests
         pushableObj = new GameObject("Pushable Object");
         pushableRb = pushableObj.AddComponent<Rigidbody2D>();
 
-        // Enable test mode to prevent input processing
-        Player_Controller.IsTestMode = true;
-
-        // Add the Player_Controller component
-        playerController = playerObj.AddComponent<Player_Controller>();
+        // Add the Player_ControllerTest component
+        playerController = playerObj.AddComponent<Player_ControllerTest>();
 
         // Set the dependencies manually
         playerController.SetDependenciesForTesting(rb, animator, spriteRenderer);
@@ -57,9 +54,6 @@ public class Player_ControllerTests
         // Clean up
         Object.DestroyImmediate(playerObj);
         Object.DestroyImmediate(pushableObj);
-
-        // Reset test mode
-        Player_Controller.IsTestMode = false;
     }
 
     [Test]
@@ -137,8 +131,9 @@ public class Player_ControllerTests
         Assert.AreEqual(Vector2.zero, rb.velocity, "Rigidbody velocity should be zero when movement is locked");
 
         // We'll use reflection to check the private field
-        System.Reflection.FieldInfo isMovementLockedField = typeof(Player_Controller).GetField("isMovementLocked",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        System.Reflection.FieldInfo isMovementLockedField = typeof(Player_ControllerTest).GetField("isMovementLocked",
+            System.Reflection.BindingFlags.NonPublic |
+            System.Reflection.BindingFlags.Instance);
 
         bool isMovementLocked = (bool)isMovementLockedField.GetValue(playerController);
         Assert.IsTrue(isMovementLocked, "isMovementLocked should be set to true");

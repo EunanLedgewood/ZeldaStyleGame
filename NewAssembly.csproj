@@ -66,6 +66,7 @@
     <Compile Include="Assets\_GAME_\Scripts\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Box.cs" />
     <Compile Include="Assets\_GAME_\Scripts\GameManager.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\TimeScaleInitialiser.cs" />
     <Compile Include="Assets\_GAME_\Scripts\NumberBox.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfOrderDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Enemy Archer.cs" />
@@ -77,8 +78,10 @@
     <Compile Include="Assets\_GAME_\Scripts\Game Over Manager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\UI Manager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Arrow.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\Emergency Movement Fix.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfChaosDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ClueBox.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\PlayerControllerTest.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfBalanceDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ControlsDisplayManager.cs" />
   </ItemGroup>

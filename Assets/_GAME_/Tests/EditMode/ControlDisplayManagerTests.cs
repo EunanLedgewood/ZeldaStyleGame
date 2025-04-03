@@ -20,6 +20,8 @@ public class ControlsDisplayManagerTests
     [SetUp]
     public void Setup()
     {
+        Debug.Log("Setting up test environment");
+
         // Create required objects
         canvasObj = new GameObject("Canvas");
         pauseMenuPanelObj = new GameObject("PauseMenuPanel");
@@ -46,10 +48,14 @@ public class ControlsDisplayManagerTests
             controlEntryPrefabObj,
             closeButtonObj.GetComponent<Button>()
         );
+
+        Debug.Log("Test environment setup complete");
     }
 
     private GameObject CreateControlEntryPrefab()
     {
+        Debug.Log("Creating control entry prefab");
+
         GameObject prefab = new GameObject("ControlEntryPrefab");
 
         GameObject actionTextObj = new GameObject("ActionText");
@@ -64,18 +70,23 @@ public class ControlsDisplayManagerTests
         descriptionTextObj.transform.SetParent(prefab.transform);
         descriptionTextObj.AddComponent<TextMeshProUGUI>();
 
+        Debug.Log("Control entry prefab created");
         return prefab;
     }
 
     [TearDown]
     public void TearDown()
     {
+        Debug.Log("Tearing down test environment");
         Object.DestroyImmediate(canvasObj);
+        Debug.Log("Test environment torn down");
     }
 
     [Test]
     public void DefaultControls_AreAddedWhenNoControlsExist()
     {
+        Debug.Log("Testing default controls initialization");
+
         // Act
         controlsManager.TestAwake();
 
@@ -93,11 +104,15 @@ public class ControlsDisplayManagerTests
 
         Assert.AreEqual("Pause", controls[2].actionName);
         Assert.AreEqual("ESC", controls[2].keyName);
+
+        Debug.Log("Default controls added and validated");
     }
 
     [Test]
     public void AddControl_AddsNewControlToList()
     {
+        Debug.Log("Testing adding a new control");
+
         // Arrange
         controlsManager.TestAwake(); // Initialize default controls
         int initialCount = controlsManager.GetControlsForTest().Count;
@@ -114,11 +129,15 @@ public class ControlsDisplayManagerTests
         Assert.AreEqual("Jump", addedControl.actionName);
         Assert.AreEqual("Space", addedControl.keyName);
         Assert.AreEqual("Make your character jump", addedControl.description);
+
+        Debug.Log("New control added and validated");
     }
 
     [Test]
     public void ReturnToPauseMenu_HidesControlsAndShowsPauseMenu()
     {
+        Debug.Log("Testing returning to pause menu");
+
         // Arrange
         controlsManager.TestAwake();
         pauseMenuPanelObj.SetActive(false);
@@ -130,5 +149,7 @@ public class ControlsDisplayManagerTests
         // Assert
         Assert.IsFalse(controlsManagerObj.activeSelf, "Controls panel should be hidden");
         Assert.IsTrue(pauseMenuPanelObj.activeSelf, "Pause menu should be visible");
+
+        Debug.Log("Successfully returned to pause menu and validated state");
     }
 }
