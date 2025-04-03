@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[SelectionBase]
 public class Player_Controller : MonoBehaviour
 {
+    public static bool IsTestMode = false;
+
     // Flag to completely disable validation - set this to true in tests
     [HideInInspector]
     public bool skipValidation = false;
@@ -31,6 +30,9 @@ public class Player_Controller : MonoBehaviour
     private Vector2 _moveDir = Vector2.zero;
     private Directions _facingDirection = Directions.RIGHT;
 
+    // Delegate to allow method injection for testing
+    public System.Action<bool> OnLockMovement;
+
     // Hashes for animator states
     private readonly int _animMoveRight = Animator.StringToHash("Anim_Player_Move_Right");
     private readonly int _animIdleRight = Animator.StringToHash("Anim_Player_Idle_Right");
@@ -43,8 +45,8 @@ public class Player_Controller : MonoBehaviour
 
     private void Awake()
     {
-        // If we're in a test, just skip everything
-        if (skipValidation)
+        // Skip everything if in test mode or skipping validation
+        if (IsTestMode || skipValidation)
         {
             return;
         }
@@ -52,6 +54,9 @@ public class Player_Controller : MonoBehaviour
         // Try to find components automatically if not manually assigned
         FindAndAssignComponents();
         ValidateDependencies();
+
+        // Default to internal method if no delegate is set
+        OnLockMovement = InternalLockMovement;
     }
 
     // Method to automatically find and assign components
@@ -163,6 +168,9 @@ public class Player_Controller : MonoBehaviour
 
     private void Update()
     {
+        // Skip input processing in test mode
+        if (IsTestMode) return;
+
         if (!isMovementLocked)
         {
             GatherInput();
@@ -174,6 +182,9 @@ public class Player_Controller : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Skip movement processing in test mode
+        if (IsTestMode) return;
+
         if (!isMovementLocked)
         {
             MovementUpdate();
@@ -282,7 +293,14 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
+    // Public method that uses the delegate
     public void LockMovement(bool lockMovement)
+    {
+        OnLockMovement?.Invoke(lockMovement);
+    }
+
+    // Internal method for locking movement
+    public void InternalLockMovement(bool lockMovement)
     {
         isMovementLocked = lockMovement;
         if (lockMovement && _rb != null)

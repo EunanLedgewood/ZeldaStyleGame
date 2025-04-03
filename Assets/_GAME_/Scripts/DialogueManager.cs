@@ -1,11 +1,13 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+using TMPro;
 using System;
 
 public class DialogueManager : MonoBehaviour
 {
-    public event Action OnDialogueEnd; // Event triggered when dialogue ends
+    public event Action<string[], Sprite> OnSetDialogueLines;
+    public event Action OnDialogueStarted;
+    public event Action OnDialogueEnd;
 
     [Header("UI References")]
     [SerializeField] private GameObject dialoguePanel;
@@ -21,12 +23,18 @@ public class DialogueManager : MonoBehaviour
     {
         dialoguePanel.SetActive(false);
         nextButton.gameObject.SetActive(false);
+
+        // Subscribe to next button click
+        nextButton.onClick.AddListener(DisplayNextLine);
     }
 
     public void SetDialogueLines(string[] lines, Sprite npcSprite)
     {
         dialogueLines = lines;
         currentLineIndex = 0;
+
+        // Trigger the event
+        OnSetDialogueLines?.Invoke(lines, npcSprite);
 
         if (npcImageSlot != null)
         {
@@ -50,6 +58,9 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        // Trigger the event
+        OnDialogueStarted?.Invoke();
+
         isDialogueActive = true;
         dialoguePanel.SetActive(true);
         nextButton.gameObject.SetActive(true);
@@ -61,7 +72,6 @@ public class DialogueManager : MonoBehaviour
         if (!isDialogueActive) return;
 
         currentLineIndex++;
-
         if (currentLineIndex < dialogueLines.Length)
         {
             DisplayCurrentLine();
@@ -86,6 +96,7 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         nextButton.gameObject.SetActive(false);
 
-        OnDialogueEnd?.Invoke(); // Notify listeners
+        // Invoke the dialogue end event
+        OnDialogueEnd?.Invoke();
     }
 }
