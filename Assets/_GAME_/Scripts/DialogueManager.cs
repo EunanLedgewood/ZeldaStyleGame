@@ -19,6 +19,30 @@ public class DialogueManager : MonoBehaviour
     private int currentLineIndex = 0;
     private bool isDialogueActive = false;
 
+    // Added for testing
+    public void SetTestReferences(
+        GameObject panel,
+        TextMeshProUGUI text,
+        Image image,
+        Button button)
+    {
+        dialoguePanel = panel;
+        dialogueText = text;
+        npcImageSlot = image;
+        nextButton = button;
+    }
+
+    public void TestStart()
+    {
+        Start();
+    }
+
+    // For testing - access current text
+    public string GetCurrentTextForTest()
+    {
+        return dialogueText.text;
+    }
+
     private void Start()
     {
         dialoguePanel.SetActive(false);

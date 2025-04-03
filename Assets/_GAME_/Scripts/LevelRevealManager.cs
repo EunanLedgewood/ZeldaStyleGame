@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Add this attribute to allow instantiating the class without errors
-[DefaultExecutionOrder(1000)] // Delay execution to allow test setup
 public class LevelRevealManager : MonoBehaviour
 {
     [Header("Objects to Hide Initially")]
@@ -18,16 +16,16 @@ public class LevelRevealManager : MonoBehaviour
     [SerializeField] private float revealDelay = 0.5f;
     [SerializeField] private float timeBetweenObjects = 0.1f;
 
+    [Header("Testing")]
+    [SerializeField] private bool isTestMode = false;
+
     // Properties for testing
     public bool LevelRevealed => levelRevealed;
-    public GameObject[] Enemies => enemies;
-    public GameObject[] Boxes => boxes;
-    public GameObject[] Slots => slots;
 
     private DialogueManager dialogueManager;
     private bool levelRevealed = false;
 
-    // Public method to initialize test resources
+    // For testing
     public void InitializeForTest(GameObject[] testEnemies, GameObject[] testBoxes, GameObject[] testSlots)
     {
         enemies = testEnemies;
@@ -37,19 +35,21 @@ public class LevelRevealManager : MonoBehaviour
 
     private void Awake()
     {
-        // Only try to find DialogueManager if we're not in an editor test
-        // This check prevents errors during tests
-        if (!Application.isEditor || Application.isPlaying)
+        // Skip initialization if in test mode
+        if (isTestMode)
         {
-            dialogueManager = FindObjectOfType<DialogueManager>();
-            if (dialogueManager == null)
-            {
-                Debug.LogWarning("LevelRevealManager: DialogueManager not found in scene!");
-            }
+            Debug.Log("LevelRevealManager: Running in test mode, skipping initialization");
+            return;
+        }
+
+        // Find DialogueManager
+        dialogueManager = FindObjectOfType<DialogueManager>();
+        if (dialogueManager == null)
+        {
+            Debug.LogWarning("LevelRevealManager: DialogueManager not found in scene!");
         }
 
         // Only hide objects if arrays are initialized
-        // This check prevents NullReferenceException in tests
         if (enemies != null && boxes != null && slots != null)
         {
             HideAllObjects();
@@ -58,7 +58,10 @@ public class LevelRevealManager : MonoBehaviour
 
     private void Start()
     {
-        // Subscribe to dialogue end event only if not in editor test
+        // Skip in test mode
+        if (isTestMode) return;
+
+        // Subscribe to dialogue end event
         if (dialogueManager != null)
         {
             dialogueManager.OnDialogueEnd += OnDialogueComplete;
@@ -128,6 +131,7 @@ public class LevelRevealManager : MonoBehaviour
     // Made public for testing
     public void StartRevealSequence()
     {
+        // Only do the sequence if we haven't revealed yet
         if (!levelRevealed)
         {
             StartCoroutine(RevealObjectsSequence());
@@ -147,10 +151,8 @@ public class LevelRevealManager : MonoBehaviour
 
         // Wait for initial delay
         yield return new WaitForSeconds(revealDelay);
-        Debug.Log("LevelRevealManager: Starting reveal sequence after delay");
 
         // Reveal slots first
-        Debug.Log("LevelRevealManager: Revealing slots");
         foreach (GameObject slot in slots)
         {
             if (slot != null)
@@ -159,10 +161,8 @@ public class LevelRevealManager : MonoBehaviour
                 yield return new WaitForSeconds(timeBetweenObjects);
             }
         }
-        Debug.Log("LevelRevealManager: All slots revealed");
 
         // Reveal boxes second
-        Debug.Log("LevelRevealManager: Revealing boxes");
         foreach (GameObject box in boxes)
         {
             if (box != null)
@@ -171,10 +171,8 @@ public class LevelRevealManager : MonoBehaviour
                 yield return new WaitForSeconds(timeBetweenObjects);
             }
         }
-        Debug.Log("LevelRevealManager: All boxes revealed");
 
         // Reveal enemies last
-        Debug.Log("LevelRevealManager: Revealing enemies");
         foreach (GameObject enemy in enemies)
         {
             if (enemy != null)
@@ -183,7 +181,6 @@ public class LevelRevealManager : MonoBehaviour
                 yield return new WaitForSeconds(timeBetweenObjects);
             }
         }
-        Debug.Log("LevelRevealManager: All enemies revealed");
 
         Debug.Log("LevelRevealManager: All objects revealed");
     }

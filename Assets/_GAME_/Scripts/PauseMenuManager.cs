@@ -12,6 +12,25 @@ public class PauseMenuManager : MonoBehaviour
 
     private bool isPaused = false;
 
+    // For testing
+    public void SetTestReferences(GameObject panel, Slider slider)
+    {
+        pauseMenuPanel = panel;
+        volumeSlider = slider;
+    }
+
+    // For testing
+    public bool GetIsPausedForTest()
+    {
+        return isPaused;
+    }
+
+    // For testing
+    public void TestStart()
+    {
+        Start();
+    }
+
     private void Start()
     {
         // Ensure the pause menu is hidden at start

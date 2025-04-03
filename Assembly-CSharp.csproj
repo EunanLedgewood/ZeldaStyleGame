@@ -1138,6 +1138,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Tests.csproj">
+      <Project>{B8AF16D3-B6BE-B1EA-B264-8FC2279FEE13}</Project>
+      <Name>Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="PlayMode.csproj">
       <Project>{5928AE4B-BD00-2ECF-B382-D1149CE14E22}</Project>
       <Name>PlayMode</Name>

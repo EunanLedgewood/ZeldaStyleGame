@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,12 +20,45 @@ public class GameManager : MonoBehaviour
     [Header("Game State")]
     public bool isGameOver = false;
 
+    // For testing
+    public Action<string, float> InvokeAction;
+
+    // For testing StopMusic
+    public Action TestStopMusicAction { get; set; }
+
+    // For testing setup
+    public void InitializeForTesting()
+    {
+        // Set default values for testing
+        InvokeAction = (methodName, time) => {
+            // Do nothing in tests
+        };
+
+        // Set up background music
+        SetupBackgroundMusic();
+    }
+
+    // For testing - set clip
+    public void SetMusicClipForTest(AudioClip clip)
+    {
+        backgroundMusic = clip;
+    }
+
+    // For testing - set game over clip
+    public void SetGameOverMusicForTest(AudioClip clip)
+    {
+        gameOverMusic = clip;
+    }
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Real implementation for invoke
+            InvokeAction = Invoke;
 
             // Set up background music
             SetupBackgroundMusic();
@@ -79,7 +113,7 @@ public class GameManager : MonoBehaviour
 
         // Use Invoke to ensure this runs after the current frame
         // This allows any other slot-related operations to complete first
-        Invoke("PerformSlotCheck", 0.1f);
+        InvokeAction("PerformSlotCheck", 0.1f);
     }
 
     // Direct check for debugging
@@ -122,8 +156,8 @@ public class GameManager : MonoBehaviour
         // Only proceed to next level if ALL slots are filled
         if (filledCount == allSlots.Length)
         {
-            Debug.Log("?? ALL BOXES PLACED! Loading next level... ??");
-            Invoke("LoadNextLevel", 1f); // Delay before loading next level
+            Debug.Log("All BOXES PLACED! Loading next level...");
+            InvokeAction("LoadNextLevel", 1f); // Delay before loading next level
         }
     }
 
@@ -176,6 +210,9 @@ public class GameManager : MonoBehaviour
 
     public void StopMusic()
     {
+        // Call the test action if it exists
+        TestStopMusicAction?.Invoke();
+
         if (musicSource != null)
         {
             musicSource.Stop();

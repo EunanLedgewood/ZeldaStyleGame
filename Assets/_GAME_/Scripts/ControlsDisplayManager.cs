@@ -23,6 +23,26 @@ public class ControlsDisplayManager : MonoBehaviour
 
     private GameObject pauseMenuPanel;
 
+    // Added for testing
+    public void SetTestReferences(Transform container, GameObject prefab, Button button)
+    {
+        controlsContainer = container;
+        controlEntryPrefab = prefab;
+        closeButton = button;
+    }
+
+    // For testing - expose the controls list
+    public List<ControlInfo> GetControlsForTest()
+    {
+        return controls;
+    }
+
+    // Expose Awake for testing
+    public void TestAwake()
+    {
+        Awake();
+    }
+
     private void Awake()
     {
         // Set up default controls if none exist

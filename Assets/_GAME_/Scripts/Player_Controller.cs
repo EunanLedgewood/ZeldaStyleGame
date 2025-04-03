@@ -43,6 +43,18 @@ public class Player_Controller : MonoBehaviour
     private readonly int _animIdleUp = Animator.StringToHash("Anim_Player_Idle_Up");
     private readonly int _animIdleDown = Animator.StringToHash("Anim_Player_Idle_Down");
 
+    // For testing - allows calling Start manually
+    public void TestStart()
+    {
+        Start();
+    }
+
+    // For testing - set pushable object
+    public void SetPushableObjectForTesting(Transform pushable)
+    {
+        _objectToPush = pushable;
+    }
+
     private void Awake()
     {
         // Skip everything if in test mode or skipping validation
