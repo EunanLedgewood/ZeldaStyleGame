@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayMode", "PlayMode.csproj", "{5928AE4B-BD00-2ECF-B382-D1149CE14E22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Performance", "Performance.csproj", "{06A3793E-164E-528B-F59E-681FF13F3DBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{5928AE4B-BD00-2ECF-B382-D1149CE14E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5928AE4B-BD00-2ECF-B382-D1149CE14E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5928AE4B-BD00-2ECF-B382-D1149CE14E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06A3793E-164E-528B-F59E-681FF13F3DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A3793E-164E-528B-F59E-681FF13F3DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A3793E-164E-528B-F59E-681FF13F3DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A3793E-164E-528B-F59E-681FF13F3DBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

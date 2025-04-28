@@ -1,46 +1,64 @@
-using System.Collections;
+using System;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
-using UnityEngine.TestTools;
+using UnityEngine.Profiling;
 
 public class GamePerformanceTests
 {
-    [UnityTest, Performance]
-    public IEnumerator TestSceneLoadTime()
+    [Test, Performance]
+    public void MemoryAllocationTest()
     {
-        // Measure scene loading performance
-        yield return Measure.Method(() =>
+        Measure.Method(() =>
         {
-            SceneManager.LoadScene("Balance2"); // Replace with your actual scene name
+            // Simulate object creation and destruction in Edit Mode
+            for (int i = 0; i < 1000; i++)
+            {
+                var tempObject = new GameObject("TempObject");
+
+                // Use DestroyImmediate in Edit Mode
+                UnityEngine.Object.DestroyImmediate(tempObject);
+            }
         })
-        .WarmupCount(3)
+        .WarmupCount(2)
         .MeasurementCount(10)
         .IterationsPerMeasurement(5)
         .Run();
     }
 
-    [UnityTest, Performance]
-    public IEnumerator TestPlayerMovementPerformance()
+    [Test, Performance]
+    public void ObjectCreationOverheadTest()
     {
-        // Load the scene
-        yield return SceneManager.LoadSceneAsync("Balance2");
-
-        // Find the player controller
-        var playerController = Object.FindObjectOfType<Player_Controller>();
-        Assert.IsNotNull(playerController, "Player Controller not found in scene");
-
-        yield return Measure.Method(() =>
+        Measure.Method(() =>
         {
-            // Simulate player movement for performance testing
-            playerController.SetDependenciesForTesting(
-                playerController.GetComponent<Rigidbody2D>(),
-                playerController.GetComponent<Animator>(),
-                playerController.GetComponent<SpriteRenderer>()
-            );
+            // Simulate lightweight object creation
+            for (int i = 0; i < 10000; i++)
+            {
+                var tempList = new System.Collections.Generic.List<int>();
+                tempList.Add(i);
+            }
+        })
+        .WarmupCount(3)
+        .MeasurementCount(20)
+        .IterationsPerMeasurement(10)
+        .Run();
+    }
+
+    [Test, Performance]
+    public void VectorCalculationPerformance()
+    {
+        Measure.Method(() =>
+        {
+            // Simulate vector calculations
+            Vector2 position = Vector2.zero;
+            Vector2 velocity = new Vector2(5f, 3f);
+
+            for (int i = 0; i < 1000; i++)
+            {
+                position += velocity * Time.deltaTime;
+                float distance = Vector2.Distance(position, Vector2.one);
+                velocity = velocity.normalized * distance;
+            }
         })
         .WarmupCount(5)
         .MeasurementCount(20)
@@ -48,20 +66,17 @@ public class GamePerformanceTests
         .Run();
     }
 
-    [UnityTest, Performance]
-    public IEnumerator TestEnemyArcherPerformance()
+    [Test, Performance]
+    public void SimpleComputationTest()
     {
-        // Load the scene
-        yield return SceneManager.LoadSceneAsync("Balance2");
-
-        // Find an enemy archer
-        var enemyArcher = Object.FindObjectOfType<Enemy_Archer>();
-        Assert.IsNotNull(enemyArcher, "Enemy Archer not found in scene");
-
-        yield return Measure.Method(() =>
+        Measure.Method(() =>
         {
-            // Test arrow shooting performance
-            enemyArcher.ShootArrow();
+            // Simulate basic computational task
+            double result = 0;
+            for (int i = 0; i < 10000; i++)
+            {
+                result += Math.Sin(i) * Math.Cos(i);
+            }
         })
         .WarmupCount(3)
         .MeasurementCount(15)

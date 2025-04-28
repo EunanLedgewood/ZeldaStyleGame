@@ -308,7 +308,7 @@ public class GameUI_Manager : MonoBehaviour
     {
         // Reset time scale
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Main Menu");
     }
 
     public void QuitGame()
