@@ -19,18 +19,26 @@ public class Player_Health : MonoBehaviour
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip gameOverSound;
 
+    [Header("Dance Floor Settings")]
+    [SerializeField] private bool enableDanceFloorDamage = true;
+    [SerializeField] private int danceFloorDamageAmount = 1;
+    [SerializeField] private Color playerHurtColor = new Color(1f, 0.5f, 0.5f, 1f);
+    [SerializeField] private AudioClip danceFloorDamageSound;
+
     private int currentHealth;
     private bool isInvincible = false;
     private Rigidbody2D rb;
     private Player_Controller playerController;
     private AudioSource audioSource;
     private bool isGameOver = false;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerController = GetComponent<Player_Controller>();
         audioSource = GetComponent<AudioSource>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (audioSource == null)
         {
@@ -80,6 +88,42 @@ public class Player_Health : MonoBehaviour
         }
     }
 
+    // New method specific for dance floor damage
+    public void TakeDanceFloorDamage(Vector2 damageSource)
+    {
+        if (!enableDanceFloorDamage || isInvincible || isGameOver) return;
+
+        currentHealth -= danceFloorDamageAmount;
+
+        // Play special dance floor damage sound if available
+        if (danceFloorDamageSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(danceFloorDamageSound);
+        }
+        // Fall back to regular hurt sound
+        else if (hurtSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hurtSound);
+        }
+
+        // Update UI
+        UpdateHealthUI();
+
+        // Apply a smaller knockback for dance floor damage
+        Vector2 knockbackDirection = ((Vector2)transform.position - damageSource).normalized;
+        rb.AddForce(knockbackDirection * (knockbackForce * 0.5f), ForceMode2D.Impulse);
+
+        // Check if player is dead
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            StartCoroutine(InvincibilityFrames());
+        }
+    }
+
     private IEnumerator InvincibilityFrames()
     {
         isInvincible = true;
@@ -104,22 +148,53 @@ public class Player_Health : MonoBehaviour
         // Get all renderers (could be SpriteRenderer or other renderer types)
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
 
+        // Store original colors
+        Dictionary<Renderer, Color> originalColors = new Dictionary<Renderer, Color>();
+        foreach (Renderer renderer in renderers)
+        {
+            if (renderer is SpriteRenderer spriteRenderer)
+            {
+                originalColors[renderer] = spriteRenderer.color;
+            }
+        }
+
         // Continue flashing for the duration of invincibility
         while (elapsedTime < invincibilityDuration)
         {
-            // Toggle visibility for all renderers
+            // Toggle visibility/color for all renderers
             foreach (Renderer renderer in renderers)
             {
-                renderer.enabled = !renderer.enabled;
+                if (renderer is SpriteRenderer spriteRenderer)
+                {
+                    if (spriteRenderer.enabled)
+                    {
+                        // Flash to hurt color instead of just toggling visibility
+                        spriteRenderer.color = playerHurtColor;
+                    }
+                    else
+                    {
+                        spriteRenderer.enabled = true;
+                        spriteRenderer.color = originalColors[renderer];
+                    }
+                }
+                else
+                {
+                    renderer.enabled = !renderer.enabled;
+                }
             }
             yield return new WaitForSeconds(0.1f);
             elapsedTime += 0.1f;
         }
 
-        // Ensure all renderers are visible when invincibility ends
+        // Ensure all renderers are visible with original colors when invincibility ends
         foreach (Renderer renderer in renderers)
         {
             renderer.enabled = true;
+
+            if (renderer is SpriteRenderer spriteRenderer && originalColors.ContainsKey(renderer))
+            {
+                spriteRenderer.color = originalColors[renderer];
+            }
         }
 
         isInvincible = false;
@@ -193,6 +268,12 @@ public class Player_Health : MonoBehaviour
         // Uncomment one of these:
         // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         // SceneManager.LoadScene("GameOverScene");
+    }
+
+    // Public accessor method for current health
+    public int GetCurrentHealth()
+    {
+        return currentHealth;
     }
 
     // Public method to reset health (can be called when restarting level)

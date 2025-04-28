@@ -19,13 +19,22 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private Animator _animator;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private AudioSource _audioSource;
 
     [Header("Pushable Object")]
     [SerializeField] private float pushStrength = 5f;
     [SerializeField] private Transform _objectToPush;
 
+    [Header("Dance Floor Integration")]
+    [SerializeField] private bool enableDanceFloorEffects = true;
+    [SerializeField] private AudioClip tileWarningSound;
+    [SerializeField] private AudioClip tileDangerSound;
+    [SerializeField] private float nervousAnimationSpeed = 1.5f; // Animation speed when on warning tile
+
     private Vector2 _moveDir = Vector2.zero;
     private Directions _facingDirection = Directions.RIGHT;
+    private DanceFloorTile _currentTile = null; // Reference to the tile player is standing on
+    private float _defaultAnimationSpeed = 1f; // Store the default animation speed
 
     // Hashes for animator states
     private readonly int _animMoveRight = Animator.StringToHash("Anim_Player_Move_Right");
@@ -97,6 +106,17 @@ public class Player_Controller : MonoBehaviour
                 }
             }
         }
+
+        // If AudioSource is not assigned, try to find it
+        if (_audioSource == null)
+        {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+            {
+                _audioSource = gameObject.AddComponent<AudioSource>();
+                _audioSource.playOnAwake = false;
+            }
+        }
     }
 
     // Public method to validate dependencies (useful for unit testing)
@@ -135,6 +155,12 @@ public class Player_Controller : MonoBehaviour
 
     private void Start()
     {
+        // Store default animation speed
+        if (_animator != null)
+        {
+            _defaultAnimationSpeed = _animator.speed;
+        }
+
         // Ensure gravity scale is set to 0 for pushable objects to prevent them from falling at the start
         if (_objectToPush != null && _objectToPush.GetComponent<Rigidbody2D>())
         {
@@ -271,5 +297,93 @@ public class Player_Controller : MonoBehaviour
             _rb.velocity = Vector2.zero;
         }
         Debug.Log($"LockMovement called. Movement Locked: {lockMovement}");
+    }
+
+    // Dance Floor integration methods
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Check if we're on a dance floor tile
+        if (enableDanceFloorEffects)
+        {
+            DanceFloorTile tile = other.GetComponent<DanceFloorTile>();
+            if (tile != null)
+            {
+                _currentTile = tile;
+
+                // Subscribe to the tile's state change event
+                tile.OnTileStateChanged += OnTileStateChanged;
+
+                // Check the current state of the tile
+                CheckTileState(tile.GetCurrentState());
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // Check if we're leaving a dance floor tile
+        if (enableDanceFloorEffects && _currentTile != null)
+        {
+            DanceFloorTile tile = other.GetComponent<DanceFloorTile>();
+            if (tile != null && tile == _currentTile)
+            {
+                // Unsubscribe from the tile's state change event
+                tile.OnTileStateChanged -= OnTileStateChanged;
+
+                // Reset animation speed
+                if (_animator != null)
+                {
+                    _animator.speed = _defaultAnimationSpeed;
+                }
+
+                _currentTile = null;
+            }
+        }
+    }
+
+    // Handle tile state changes
+    private void OnTileStateChanged(DanceFloorTile.TileState newState)
+    {
+        CheckTileState(newState);
+    }
+
+    private void CheckTileState(DanceFloorTile.TileState state)
+    {
+        if (!enableDanceFloorEffects) return;
+
+        switch (state)
+        {
+            case DanceFloorTile.TileState.Warning:
+                // Player is on a warning tile - look nervous!
+                if (_animator != null)
+                {
+                    _animator.speed = nervousAnimationSpeed;
+                }
+
+                // Play warning sound
+                if (_audioSource != null && tileWarningSound != null)
+                {
+                    _audioSource.PlayOneShot(tileWarningSound);
+                }
+                break;
+
+            case DanceFloorTile.TileState.Danger:
+                // Player is on a danger tile!
+                // Play danger sound
+                if (_audioSource != null && tileDangerSound != null)
+                {
+                    _audioSource.PlayOneShot(tileDangerSound);
+                }
+                break;
+
+            default:
+                // Reset animation speed for other states
+                if (_animator != null)
+                {
+                    _animator.speed = _defaultAnimationSpeed;
+                }
+                break;
+        }
     }
 }

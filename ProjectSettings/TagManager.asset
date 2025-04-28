@@ -59,6 +59,9 @@ TagManager:
   - name: Vegetation
     uniqueID: 1500959595
     locked: 0
+  - name: DanceFloor
+    uniqueID: 1967667953
+    locked: 0
   - name: Character
     uniqueID: 1626587889
     locked: 0
