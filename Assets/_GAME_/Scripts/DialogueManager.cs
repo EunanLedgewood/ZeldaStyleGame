@@ -15,9 +15,14 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Image npcImageSlot;
     [SerializeField] private Button nextButton;
 
+    [Header("Settings")]
+    [SerializeField] private float inputCooldown = 0.5f; // Prevents accidental double-inputs
+
     private string[] dialogueLines;
     private int currentLineIndex = 0;
     private bool isDialogueActive = false;
+    private float lastInputTime = 0f;
+    private bool isTransitioning = false;
 
     // Added for testing
     public void SetTestReferences(
@@ -48,8 +53,23 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         nextButton.gameObject.SetActive(false);
 
-        // Subscribe to next button click
-        nextButton.onClick.AddListener(DisplayNextLine);
+        // Subscribe to next button click - remove old listeners first to prevent duplicates
+        nextButton.onClick.RemoveAllListeners();
+        nextButton.onClick.AddListener(HandleNextButtonClick);
+    }
+
+    // New method to handle button clicks with extra safety
+    private void HandleNextButtonClick()
+    {
+        // Prevent rapid clicking
+        if (Time.time - lastInputTime < inputCooldown || isTransitioning)
+        {
+            Debug.Log("Input ignored - too soon after last input or in transition");
+            return;
+        }
+
+        lastInputTime = Time.time;
+        DisplayNextLine();
     }
 
     public void SetDialogueLines(string[] lines, Sprite npcSprite)
@@ -72,6 +92,8 @@ public class DialogueManager : MonoBehaviour
                 npcImageSlot.gameObject.SetActive(false);
             }
         }
+
+        Debug.Log($"Dialogue set with {lines.Length} lines");
     }
 
     public void StartDialogue()
@@ -88,12 +110,24 @@ public class DialogueManager : MonoBehaviour
         isDialogueActive = true;
         dialoguePanel.SetActive(true);
         nextButton.gameObject.SetActive(true);
+
+        // Reset to start of dialogue
+        currentLineIndex = 0;
         DisplayCurrentLine();
+
+        // Set last input time to prevent immediate skipping
+        lastInputTime = Time.time;
+
+        Debug.Log("Dialogue started");
     }
 
     public void DisplayNextLine()
     {
-        if (!isDialogueActive) return;
+        if (!isDialogueActive || isTransitioning) return;
+
+        isTransitioning = true;
+
+        Debug.Log($"Displaying next line. Current index: {currentLineIndex}, moving to {currentLineIndex + 1}");
 
         currentLineIndex++;
         if (currentLineIndex < dialogueLines.Length)
@@ -104,6 +138,15 @@ public class DialogueManager : MonoBehaviour
         {
             EndDialogue();
         }
+
+        // Small delay before allowing next input
+        StartCoroutine(DelayedTransitionEnd());
+    }
+
+    private System.Collections.IEnumerator DelayedTransitionEnd()
+    {
+        yield return new WaitForSeconds(0.1f);
+        isTransitioning = false;
     }
 
     private void DisplayCurrentLine()
@@ -111,6 +154,7 @@ public class DialogueManager : MonoBehaviour
         if (dialogueText != null && currentLineIndex < dialogueLines.Length)
         {
             dialogueText.text = dialogueLines[currentLineIndex];
+            Debug.Log($"Displayed line {currentLineIndex}: {dialogueLines[currentLineIndex]}");
         }
     }
 
@@ -122,5 +166,23 @@ public class DialogueManager : MonoBehaviour
 
         // Invoke the dialogue end event
         OnDialogueEnd?.Invoke();
+
+        Debug.Log("Dialogue ended");
+    }
+
+    private void Update()
+    {
+        // Process keyboard input to advance dialogue
+        if (isDialogueActive && Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        {
+            // Prevent rapid keypresses
+            if (Time.time - lastInputTime < inputCooldown || isTransitioning)
+            {
+                return;
+            }
+
+            lastInputTime = Time.time;
+            DisplayNextLine();
+        }
     }
 }

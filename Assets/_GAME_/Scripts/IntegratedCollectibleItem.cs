@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement; // Required for direct scene loading
 
 public class IntegratedCollectibleItem : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class IntegratedCollectibleItem : MonoBehaviour
     [SerializeField] private float bobHeight = 0.3f;         // How high it bobs up and down
     [SerializeField] private float bobSpeed = 2f;            // Bob cycles per second
     [SerializeField] private bool enableVisualEffects = true;
+    [SerializeField] private float delayBeforeNextLevel = 2f; // Delay before loading next level
+
+    [Header("Level Loading")]
+    [SerializeField] private bool useDirectSceneLoading = true; // Set to true to use direct scene loading
+    [SerializeField] private string nextLevelName = ""; // Optional: specific level name to load (leave empty to load next index)
 
     [Header("Visual Effects")]
     [SerializeField] private GameObject collectEffect;       // Optional particle effect
@@ -16,8 +22,9 @@ public class IntegratedCollectibleItem : MonoBehaviour
     // Static tracking for all collectibles
     private static int totalCollectiblesInScene = 0;
     private static int collectedCount = 0;
+    private static bool isLevelTransitionInProgress = false; // Prevent multiple transitions
 
-    // References to existing managers
+    // References to existing managers (kept for compatibility)
     private static DanceFloorManager danceFloorManager;
     private static GameManager gameManager;
 
@@ -34,6 +41,7 @@ public class IntegratedCollectibleItem : MonoBehaviour
         collectedCount = 0;
         danceFloorManager = null;
         gameManager = null;
+        isLevelTransitionInProgress = false;
     }
 
     private void Awake()
@@ -109,10 +117,11 @@ public class IntegratedCollectibleItem : MonoBehaviour
             AudioSource.PlayClipAtPoint(collectSound, transform.position);
         }
 
-        // Check if we've collected all items
-        if (collectedCount >= totalCollectiblesInScene)
+        // Check if we've collected all items and level transition is not already in progress
+        if (collectedCount >= totalCollectiblesInScene && !isLevelTransitionInProgress)
         {
-            StartCoroutine(AllItemsCollected());
+            isLevelTransitionInProgress = true; // Set flag to prevent multiple triggers
+            StartCoroutine(LoadNextLevelDirectly());
         }
 
         // Disable the collectible
@@ -122,34 +131,109 @@ public class IntegratedCollectibleItem : MonoBehaviour
         Destroy(gameObject, collectSound != null ? collectSound.length : 0f);
     }
 
-    private IEnumerator AllItemsCollected()
+    private IEnumerator LoadNextLevelDirectly()
     {
-        Debug.Log("All collectibles have been collected!");
+        Debug.Log("All collectibles have been collected! Preparing to load next level DIRECTLY.");
 
-        // Stop the dance floor if available
+        // Stop the dance floor if available (for compatibility)
         if (danceFloorManager != null)
         {
             danceFloorManager.StopDanceFloor();
+            Debug.Log("Dance floor manager found and stopped.");
         }
 
-        // Deactivate the boundary
+        // Deactivate the boundary (for compatibility)
         DanceFloorBoundary boundary = FindObjectOfType<DanceFloorBoundary>();
         if (boundary != null)
         {
             boundary.DeactivateBoundary();
+            Debug.Log("Dance floor boundary found and deactivated.");
         }
 
         // Wait a moment before loading the next level
-        yield return new WaitForSeconds(2f);
+        Debug.Log($"Waiting {delayBeforeNextLevel} seconds before loading next level...");
+        yield return new WaitForSeconds(delayBeforeNextLevel);
 
-        // Use your existing GameManager to load the next level
-        if (gameManager != null)
+        // DIRECT SCENE LOADING
+        if (useDirectSceneLoading)
         {
-            gameManager.CheckAllSlotsFilled();
+            LoadNextSceneDirectly();
         }
         else
         {
-            Debug.LogWarning("GameManager not found for level progression!");
+            // Try through GameManager as fallback
+            TryLoadThroughGameManager();
+        }
+    }
+
+    private void LoadNextSceneDirectly()
+    {
+        Debug.Log("LOADING NEXT LEVEL DIRECTLY via SceneManager");
+
+        try
+        {
+            // If a specific level name is provided, load that
+            if (!string.IsNullOrEmpty(nextLevelName))
+            {
+                Debug.Log($"Loading specified level by name: {nextLevelName}");
+                SceneManager.LoadScene(nextLevelName);
+            }
+            else
+            {
+                // Otherwise, load the next level by build index
+                int currentIndex = SceneManager.GetActiveScene().buildIndex;
+                int nextIndex = currentIndex + 1;
+
+                // Verify the next index exists in build settings
+                if (nextIndex < SceneManager.sceneCountInBuildSettings)
+                {
+                    Debug.Log($"Loading next level by index: {nextIndex}");
+                    SceneManager.LoadScene(nextIndex);
+                }
+                else
+                {
+                    Debug.LogError($"No next scene available in build settings! Current scene index: {currentIndex}, total scenes: {SceneManager.sceneCountInBuildSettings}");
+
+                    // As a last resort, try loading the first scene (index 0)
+                    if (currentIndex != 0)
+                    {
+                        Debug.Log("Attempting to load first scene (index 0) as fallback");
+                        SceneManager.LoadScene(0);
+                    }
+                }
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error loading next scene: {e.Message}");
+        }
+    }
+
+    private void TryLoadThroughGameManager()
+    {
+        // This is a fallback method if direct loading is disabled
+        if (gameManager != null)
+        {
+            Debug.Log("Attempting to load level through GameManager");
+
+            // Try to call ForceNextLevel if it exists
+            System.Reflection.MethodInfo forceNextLevelMethod = gameManager.GetType().GetMethod("ForceNextLevel",
+                                                                System.Reflection.BindingFlags.Public |
+                                                                System.Reflection.BindingFlags.Instance);
+            if (forceNextLevelMethod != null)
+            {
+                forceNextLevelMethod.Invoke(gameManager, null);
+            }
+            else
+            {
+                // Fall back to CheckAllSlotsFilled
+                gameManager.CheckAllSlotsFilled();
+            }
+        }
+        else
+        {
+            // If all else fails, try direct loading anyway
+            LoadNextSceneDirectly();
         }
     }
 

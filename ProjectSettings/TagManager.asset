@@ -10,6 +10,7 @@ TagManager:
   - Obstacle
   - Box
   - Enemy
+  - Collectible
   layers:
   - Default
   - TransparentFX

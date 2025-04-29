@@ -129,6 +129,11 @@ public class DanceFloorTile : MonoBehaviour
                 {
                     audioSource.PlayOneShot(dangerSound);
                 }
+                // If player is currently on the tile, check for damage immediately
+                if (playerIsOnTile && playerHealth != null)
+                {
+                    CheckPlayerOnDangerousTile();
+                }
                 break;
 
             case TileState.Cooldown:
@@ -144,7 +149,10 @@ public class DanceFloorTile : MonoBehaviour
     {
         if (playerIsOnTile && playerHealth != null)
         {
-            // Use the new TakeDanceFloorDamage method in the updated Player_Health script
+            // Log for debugging
+            Debug.Log("Player is on dangerous tile! Attempting to damage player.");
+
+            // Directly apply damage to the player
             playerHealth.TakeDanceFloorDamage(transform.position);
         }
     }
@@ -155,10 +163,12 @@ public class DanceFloorTile : MonoBehaviour
         {
             playerIsOnTile = true;
             playerHealth = other.GetComponent<Player_Health>();
+            Debug.Log("Player entered tile. Health component found: " + (playerHealth != null));
 
             // If player steps on an already dangerous tile, damage them
             if (currentState == TileState.Danger && playerHealth != null)
             {
+                Debug.Log("Player stepped on already dangerous tile!");
                 playerHealth.TakeDanceFloorDamage(transform.position);
             }
         }
@@ -169,15 +179,20 @@ public class DanceFloorTile : MonoBehaviour
         // This ensures consistent detection if the player stays on a tile that becomes dangerous
         if (other.CompareTag("Player") && currentState == TileState.Danger)
         {
+            Debug.Log("Player detected on dangerous tile during OnTriggerStay2D!");
+
             if (!playerIsOnTile || playerHealth == null)
             {
                 playerIsOnTile = true;
                 playerHealth = other.GetComponent<Player_Health>();
+                Debug.Log("Player health component found: " + (playerHealth != null));
             }
 
-            // Only apply damage if player hasn't been tagged as on this tile yet
-            // The invincibility system in Player_Health will prevent multiple damage instances
-            CheckPlayerOnDangerousTile();
+            // Apply damage directly
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDanceFloorDamage(transform.position);
+            }
         }
     }
 
@@ -187,6 +202,7 @@ public class DanceFloorTile : MonoBehaviour
         {
             playerIsOnTile = false;
             playerHealth = null;
+            Debug.Log("Player exited tile.");
         }
     }
 

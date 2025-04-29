@@ -64,6 +64,7 @@
     <Compile Include="Assets\_GAME_\Scripts\ClueBoxSpawner.cs" />
     <Compile Include="Assets\_GAME_\Scripts\BridgeCodeArea.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DialogueManager.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\EmergencyDanceFloorDamage.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Box.cs" />
     <Compile Include="Assets\_GAME_\Scripts\GameManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DanceFloorTile.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\_GAME_\Scripts\Slot.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Player_Controller.cs" />
     <Compile Include="Assets\_GAME_\Scripts\LevelRevealManager.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\EmergencyLevelLoader.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ScreenFadeManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\CollectibleItem.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Game Over Manager.cs" />

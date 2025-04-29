@@ -33,6 +33,10 @@ public class Player_Health : MonoBehaviour
     private bool isGameOver = false;
     private SpriteRenderer spriteRenderer;
 
+    // Add a timestamp for last damage to prevent multiple hits in a short time
+    private float lastDamageTime = 0f;
+    private float damageMinInterval = 0.5f; // Minimum time between damages
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -56,6 +60,9 @@ public class Player_Health : MonoBehaviour
         currentHealth = maxHealth;
         UpdateHealthUI();
         isGameOver = false;
+
+        // Log for debugging
+        Debug.Log($"Player health initialized with {maxHealth} health. Dance floor damage enabled: {enableDanceFloorDamage}");
     }
 
     public void TakeDamage(int damageAmount, Vector2 damageSource)
@@ -63,6 +70,7 @@ public class Player_Health : MonoBehaviour
         if (isInvincible || isGameOver) return;
 
         currentHealth -= damageAmount;
+        Debug.Log($"Player took {damageAmount} damage. Health now: {currentHealth}");
 
         // Apply knockback away from damage source
         Vector2 knockbackDirection = ((Vector2)transform.position - damageSource).normalized;
@@ -86,14 +94,33 @@ public class Player_Health : MonoBehaviour
         {
             StartCoroutine(InvincibilityFrames());
         }
+
+        // Track last damage time
+        lastDamageTime = Time.time;
     }
 
     // New method specific for dance floor damage
     public void TakeDanceFloorDamage(Vector2 damageSource)
     {
-        if (!enableDanceFloorDamage || isInvincible || isGameOver) return;
+        // Prevent damage if not enabled, player is invincible, game is over, or damage was recent
+        if (!enableDanceFloorDamage || isInvincible || isGameOver)
+        {
+            Debug.Log($"Dance floor damage prevented: enableDanceFloorDamage={enableDanceFloorDamage}, isInvincible={isInvincible}, isGameOver={isGameOver}");
+            return;
+        }
 
+        // Check damage interval to prevent rapid hits
+        if (Time.time - lastDamageTime < damageMinInterval)
+        {
+            Debug.Log("Too soon for another dance floor damage! Skipping.");
+            return;
+        }
+
+        Debug.Log("Player taking dance floor damage!");
         currentHealth -= danceFloorDamageAmount;
+        lastDamageTime = Time.time;
+
+        Debug.Log($"Health reduced to {currentHealth} after dance floor damage");
 
         // Play special dance floor damage sound if available
         if (danceFloorDamageSound != null && audioSource != null)
@@ -127,6 +154,7 @@ public class Player_Health : MonoBehaviour
     private IEnumerator InvincibilityFrames()
     {
         isInvincible = true;
+        Debug.Log("Player is now invincible for " + invincibilityDuration + " seconds");
 
         // Flash the player sprite to indicate invincibility
         float elapsedTime = 0f;
@@ -198,6 +226,7 @@ public class Player_Health : MonoBehaviour
         }
 
         isInvincible = false;
+        Debug.Log("Player invincibility ended");
     }
 
     private void UpdateHealthUI()
@@ -222,6 +251,7 @@ public class Player_Health : MonoBehaviour
     private void Die()
     {
         isGameOver = true;
+        Debug.Log("Player died!");
 
         // Play game over sound
         if (gameOverSound != null && audioSource != null)

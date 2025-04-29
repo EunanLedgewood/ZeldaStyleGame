@@ -298,4 +298,12 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"Game over broadcast to {enemies.Length} enemies");
     }
+
+    public void ForceNextLevel()
+    {
+        Debug.Log("GameManager: Force loading next level");
+
+        // Use Invoke to ensure this runs after the current frame
+        InvokeAction("LoadNextLevel", 0.5f);
+    }
 }
