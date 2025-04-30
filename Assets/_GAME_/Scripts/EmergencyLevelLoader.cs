@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Add this component to one of your collectible items
+// This updated version works with your existing collectible items
 public class EmergencyLevelLoader : MonoBehaviour
 {
     // How many collectibles were put in the level
@@ -9,6 +9,23 @@ public class EmergencyLevelLoader : MonoBehaviour
 
     // Static counter to track collected items
     private static int collectedItems = 0;
+
+    // For displaying in the Inspector
+    [SerializeField] private int debugCollectedItems = 0;
+
+    private void Start()
+    {
+        // Reset the counter when the level starts
+        collectedItems = 0;
+
+        Debug.Log($"[EMERGENCY LOADER] Initialized waiting for {totalCollectiblesInLevel} collectibles");
+    }
+
+    private void Update()
+    {
+        // Update debug display
+        debugCollectedItems = collectedItems;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

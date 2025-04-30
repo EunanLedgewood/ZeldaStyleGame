@@ -27642,53 +27642,6 @@ MonoBehaviour:
   checkInterval: 0.5
   damageAmount: 1
   originalTile: {fileID: 1944640378}
---- !u!1 &1953603044
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1953603046}
-  - component: {fileID: 1953603045}
-  m_Layer: 0
-  m_Name: ScreenFadeManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1953603045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1953603044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f802409ea0cb94e9d7986cf86b5f4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeDuration: 1
-  fadeColor: {r: 0, g: 0, b: 0, a: 1}
-  fadeImage: {fileID: 0}
---- !u!4 &1953603046
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1953603044}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.584449, y: 1.5751672, z: -0.1778872}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1962752966
 GameObject:
   m_ObjectHideFlags: 0
@@ -29237,18 +29190,23 @@ GameObject:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 711845914}
   - {fileID: 1507433895}
-  - {fileID: 1369474947}
+  - {fileID: 1369572612}
   - {fileID: 613176765}
   - {fileID: 184890605}
   - {fileID: 1776258221}
   - {fileID: 226394530}
   - {fileID: 524159562}
   - {fileID: 38471321}
+  - {fileID: 711845914}
   - {fileID: 1373931444}
+  - {fileID: 969531561}
+  - {fileID: 289790846}
+  - {fileID: 1232740872}
   - {fileID: 214880833}
-  - {fileID: 1825040241}
+  - {fileID: 2952242131967425151}
+  - {fileID: 2952242132387740715}
+  - {fileID: 2952242131553827741}
   - {fileID: 116088580}
   - {fileID: 1420204540}
   - {fileID: 1779420243}
@@ -29257,11 +29215,5 @@ SceneRoots:
   - {fileID: 1782086541}
   - {fileID: 859376444}
   - {fileID: 1737572203}
-  - {fileID: 1369572612}
-  - {fileID: 969531561}
-  - {fileID: 2952242131967425151}
-  - {fileID: 2952242132387740715}
-  - {fileID: 2952242131553827741}
-  - {fileID: 1953603046}
-  - {fileID: 289790846}
-  - {fileID: 1232740872}
+  - {fileID: 1369474947}
+  - {fileID: 1825040241}
