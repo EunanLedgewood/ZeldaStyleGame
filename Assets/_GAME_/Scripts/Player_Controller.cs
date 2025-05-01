@@ -386,4 +386,33 @@ public class Player_Controller : MonoBehaviour
                 break;
         }
     }
+
+    public bool IsMovementLocked()
+    {
+        return isMovementLocked;
+    }
+
+    // Add this method to get the player's facing direction
+    public Vector2 GetFacingDirection()
+    {
+        Vector2 direction = Vector2.right; // Default facing right
+
+        switch (_facingDirection)
+        {
+            case Directions.RIGHT:
+                direction = Vector2.right;
+                break;
+            case Directions.LEFT:
+                direction = Vector2.left;
+                break;
+            case Directions.UP:
+                direction = Vector2.up;
+                break;
+            case Directions.DOWN:
+                direction = Vector2.down;
+                break;
+        }
+
+        return direction;
+    }
 }

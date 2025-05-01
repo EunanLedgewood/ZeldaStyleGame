@@ -60,18 +60,22 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.48f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\_GAME_\Scripts\PressurePlate.cs" />
     <Compile Include="Assets\_GAME_\Scripts\PauseMenuManager.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\ArrowGauntletSafeZone.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ClueBoxSpawner.cs" />
     <Compile Include="Assets\_GAME_\Scripts\BridgeCodeArea.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DialogueManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\EmergencyDanceFloorDamage.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Box.cs" />
     <Compile Include="Assets\_GAME_\Scripts\GameManager.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\LevelTransitionTrigger.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DanceFloorTile.cs" />
     <Compile Include="Assets\_GAME_\Scripts\TimeScaleInitialiser.cs" />
     <Compile Include="Assets\_GAME_\Scripts\NumberBox.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfOrderDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Enemy Archer.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\ArrowGauntletManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\NPC.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DanceFloorGenerator.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DanceFloorBoundary.cs" />

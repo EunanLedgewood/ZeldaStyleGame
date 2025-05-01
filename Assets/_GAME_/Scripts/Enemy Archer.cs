@@ -5,9 +5,21 @@ using UnityEngine;
 public class Enemy_Archer : MonoBehaviour
 {
     [Header("Attack Settings")]
-    [SerializeField] private float attackCooldown = 3f; // Set to exactly 3 seconds
-    [SerializeField] public GameObject arrowPrefab; // Made public for LevelRevealManager to check
+    [SerializeField] private float attackCooldown = 3f;
+    [SerializeField] public GameObject arrowPrefab;
     [SerializeField] private Transform arrowSpawnPoint;
+
+    [Header("Shooting Mode")]
+    [SerializeField] private bool fixedDirectionMode = false;
+    [SerializeField] private Vector2 fixedShootDirection = Vector2.right;
+    [SerializeField] private bool randomizeCooldown = false;
+    [SerializeField] private float minAttackCooldown = 1f;
+    [SerializeField] private float maxAttackCooldown = 5f;
+
+    [Header("Player Detection")]
+    [SerializeField] private bool shootOnlyWhenPlayerVisible = false;
+    [SerializeField] private float playerDetectionRange = 10f;
+    [SerializeField] private LayerMask obstacleLayerMask;
 
     [Header("Animations")]
     [SerializeField] private Animator animator;
@@ -18,9 +30,9 @@ public class Enemy_Archer : MonoBehaviour
     private Transform playerTransform;
     private float cooldownTimer = 0f;
     private AudioSource audioSource;
-    private bool isActive = true; // Flag to control if this enemy is active
+    private bool isActive = true;
 
-    // Animation hash IDs (create these in your animator)
+    // Animation hash IDs
     private readonly int animIdle = Animator.StringToHash("Archer_Idle");
     private readonly int animAttack = Animator.StringToHash("Archer_Attack");
 
@@ -41,23 +53,22 @@ public class Enemy_Archer : MonoBehaviour
 
     private void OnEnable()
     {
-        // Reset active state when enabled
         isActive = true;
 
-        // Find the player immediately when enabled
-        playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        if (playerTransform == null)
+        // Find the player if we need to track them
+        if (!fixedDirectionMode || shootOnlyWhenPlayerVisible)
         {
-            Debug.LogError("Enemy_Archer: Player not found. Make sure your player has the 'Player' tag!");
+            playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+            if (playerTransform == null && !fixedDirectionMode)
+            {
+                Debug.LogError("Enemy_Archer: Player not found but archer is in tracking mode!");
+            }
         }
 
-        // Set a very short initial cooldown (0-1 second) to stagger multiple enemies
+        // Set a random initial cooldown to stagger multiple archers
         cooldownTimer = Random.Range(0f, 1f);
 
-        Debug.Log($"Enemy_Archer activated at {transform.position}");
-
-        // Check if the game is already in game over state
+        // Check if game is already over
         if (GameManager.instance != null && GameManager.instance.isGameOver)
         {
             OnGameOver();
@@ -66,15 +77,13 @@ public class Enemy_Archer : MonoBehaviour
 
     private void Update()
     {
-        // Only process if active
         if (!isActive) return;
 
-        // If player not found, try to find again
-        if (playerTransform == null)
+        // Try to find player again if needed and not found
+        if (((!fixedDirectionMode || shootOnlyWhenPlayerVisible) && playerTransform == null))
         {
-            // Try to find player again if not found
             playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
-            return;
+            if (!fixedDirectionMode) return; // Only return if we need player for targeting
         }
 
         // Count down timer
@@ -83,21 +92,55 @@ public class Enemy_Archer : MonoBehaviour
         // Attack when cooldown is complete
         if (cooldownTimer <= 0)
         {
-            Attack();
-            cooldownTimer = attackCooldown;
+            // Check if we need to verify player visibility
+            bool shouldShoot = true;
+            if (shootOnlyWhenPlayerVisible && playerTransform != null)
+            {
+                shouldShoot = CanSeePlayer();
+            }
+
+            if (shouldShoot)
+            {
+                Attack();
+            }
+
+            // Set new cooldown
+            if (randomizeCooldown)
+            {
+                cooldownTimer = Random.Range(minAttackCooldown, maxAttackCooldown);
+            }
+            else
+            {
+                cooldownTimer = attackCooldown;
+            }
         }
+    }
+
+    private bool CanSeePlayer()
+    {
+        if (playerTransform == null) return false;
+
+        // Check if player is within range
+        float distance = Vector2.Distance(transform.position, playerTransform.position);
+        if (distance > playerDetectionRange) return false;
+
+        // Cast a ray toward the player to check for obstacles
+        Vector2 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        RaycastHit2D hit = Physics2D.Raycast(arrowSpawnPoint.position, directionToPlayer, distance, obstacleLayerMask);
+
+        // If we didn't hit anything, or we hit the player, we can see the player
+        return (hit.collider == null || hit.collider.CompareTag("Player"));
     }
 
     private void Attack()
     {
-        if (arrowPrefab == null || playerTransform == null) return;
+        if (arrowPrefab == null) return;
+        if (!fixedDirectionMode && playerTransform == null) return;
 
         // Play attack animation if available
         if (animator != null)
         {
             animator.CrossFade(animAttack, 0);
-            // Animation events can be used to time the actual arrow spawn
-            // Otherwise, you could add a slight delay here
         }
         else
         {
@@ -109,27 +152,36 @@ public class Enemy_Archer : MonoBehaviour
     // This can be called from animation events or directly
     public void ShootArrow()
     {
-        // Don't shoot if not active
         if (!isActive) return;
+        if (arrowPrefab == null) return;
+        if (!fixedDirectionMode && playerTransform == null) return;
 
-        if (playerTransform == null || arrowPrefab == null) return;
+        // Calculate direction based on mode
+        Vector2 shootDirection;
+        if (fixedDirectionMode)
+        {
+            shootDirection = fixedShootDirection.normalized;
 
-        // Calculate direction to player
-        Vector2 directionToPlayer = (playerTransform.position - arrowSpawnPoint.position).normalized;
+            // If sprite is facing left but direction is right, flip one of them
+            // This depends on your specific sprite setup
+            if (transform.localScale.x < 0 && shootDirection.x > 0)
+            {
+                shootDirection.x *= -1;
+            }
+        }
+        else
+        {
+            shootDirection = (playerTransform.position - arrowSpawnPoint.position).normalized;
+        }
 
         // Create arrow
         GameObject arrowObject = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-        Debug.Log("Created arrow aimed at player");
-
-        // Ensure arrow has the correct tag
         arrowObject.tag = "Arrow";
 
         Arrow arrow = arrowObject.GetComponent<Arrow>();
-
-        // Set arrow direction and origin
         if (arrow != null)
         {
-            arrow.Initialize(directionToPlayer, transform.position);
+            arrow.Initialize(shootDirection, transform.position);
         }
         else
         {
@@ -155,27 +207,18 @@ public class Enemy_Archer : MonoBehaviour
     // Called by GameManager when game is over
     public void OnGameOver()
     {
-        // Stop all activity
         isActive = false;
-
-        // Return to idle animation if possible
         if (animator != null)
         {
             animator.CrossFade(animIdle, 0);
         }
-
-        Debug.Log($"Enemy_Archer at {transform.position} deactivated due to game over");
-
-        // Destroy any arrows that might be in flight
         DestroyActiveArrows();
     }
 
     // Find and destroy any active arrows
     private void DestroyActiveArrows()
     {
-        // Only look for arrows created recently (last 5 seconds)
         Arrow[] arrows = FindObjectsOfType<Arrow>();
-
         foreach (Arrow arrow in arrows)
         {
             Destroy(arrow.gameObject);
@@ -185,12 +228,26 @@ public class Enemy_Archer : MonoBehaviour
     // Draw gizmos for easier editor visualization
     private void OnDrawGizmosSelected()
     {
-        // Draw an arrow to show the firing direction
-        if (Application.isPlaying && playerTransform != null)
+        // Draw fixed direction if in that mode
+        if (fixedDirectionMode)
+        {
+            Gizmos.color = Color.red;
+            Vector3 direction = new Vector3(fixedShootDirection.x, fixedShootDirection.y, 0).normalized;
+            Gizmos.DrawRay(transform.position, direction * 5f);
+        }
+        // Otherwise draw direction to player if available
+        else if (Application.isPlaying && playerTransform != null)
         {
             Gizmos.color = Color.red;
             Vector3 direction = (playerTransform.position - transform.position).normalized;
-            Gizmos.DrawRay(transform.position, direction * 2f);
+            Gizmos.DrawRay(transform.position, direction * 5f);
+        }
+
+        // Draw detection range if using player visibility
+        if (shootOnlyWhenPlayerVisible)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
         }
     }
 }
