@@ -75,6 +75,7 @@
     <Compile Include="Assets\_GAME_\Scripts\NumberBox.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfOrderDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Enemy Archer.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\MemoryTile.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ArrowGauntletManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\NPC.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DanceFloorGenerator.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Assets\_GAME_\Scripts\Player_Health.cs" />
     <Compile Include="Assets\_GAME_\Scripts\IntegratedCollectibleItem.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Slot.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\MemoryGameManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Player_Controller.cs" />
     <Compile Include="Assets\_GAME_\Scripts\LevelRevealManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\EmergencyLevelLoader.cs" />
