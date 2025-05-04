@@ -392,7 +392,7 @@ public class Player_Controller : MonoBehaviour
         return isMovementLocked;
     }
 
-    // Add this method to get the player's facing direction
+    // Added this method to get the player's facing direction
     public Vector2 GetFacingDirection()
     {
         Vector2 direction = Vector2.right; // Default facing right

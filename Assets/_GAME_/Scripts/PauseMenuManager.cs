@@ -85,7 +85,6 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    // Call this method from your Quit button
     public void QuitGame()
     {
         // Stop all audio before quitting

@@ -7,7 +7,7 @@ using TMPro;
 public class BridgeCodeArea : MonoBehaviour
 {
     [Header("References")]
-    public NumberBox[] numberBoxes; // Your existing number boxes at the gate
+    public NumberBox[] numberBoxes;
     public ClueBox[] clueBoxes;     
     public Player_Controller playerController;
 

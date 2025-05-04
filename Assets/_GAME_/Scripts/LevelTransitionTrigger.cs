@@ -7,7 +7,6 @@ public class LevelTransitionTrigger : MonoBehaviour
     [SerializeField] private string nextLevelName = "";
     [SerializeField] private bool useSceneIndex = true;
     [SerializeField] private float transitionDelay = 0.5f;
-    [SerializeField] private bool showFadeEffect = true;
 
     [Header("Audio")]
     [SerializeField] private AudioClip transitionSound;
@@ -35,16 +34,6 @@ public class LevelTransitionTrigger : MonoBehaviour
 
     private System.Collections.IEnumerator TransitionToNextLevel()
     {
-        // Optional: Trigger fade effect
-        if (showFadeEffect)
-        {
-            ScreenFadeManager fadeManager = FindObjectOfType<ScreenFadeManager>();
-            if (fadeManager != null)
-            {
-                fadeManager.FadeToBlack();
-            }
-        }
-
         // Wait for transition delay
         yield return new WaitForSeconds(transitionDelay);
 

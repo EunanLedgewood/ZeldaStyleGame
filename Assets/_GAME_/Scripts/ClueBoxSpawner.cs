@@ -17,7 +17,7 @@ public class ClueBoxManager : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             GameObject clueBox = Instantiate(clueBoxPrefab, spawnPoints[i].position, Quaternion.identity);
-            clueBox.name = "ClueBox_" + i; // Rename for clarity
+            clueBox.name = "ClueBox_" + i;
         }
     }
 }

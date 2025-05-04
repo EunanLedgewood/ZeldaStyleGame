@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="Assets\_GAME_\Scripts\PressurePlate.cs" />
     <Compile Include="Assets\_GAME_\Scripts\PauseMenuManager.cs" />
-    <Compile Include="Assets\_GAME_\Scripts\ArrowGauntletSafeZone.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ClueBoxSpawner.cs" />
     <Compile Include="Assets\_GAME_\Scripts\BridgeCodeArea.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DialogueManager.cs" />
@@ -75,7 +74,6 @@
     <Compile Include="Assets\_GAME_\Scripts\NumberBox.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfOrderDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Enemy Archer.cs" />
-    <Compile Include="Assets\_GAME_\Scripts\MemoryTile.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ArrowGauntletManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\NPC.cs" />
     <Compile Include="Assets\_GAME_\Scripts\DanceFloorGenerator.cs" />
@@ -87,8 +85,6 @@
     <Compile Include="Assets\_GAME_\Scripts\Player_Controller.cs" />
     <Compile Include="Assets\_GAME_\Scripts\LevelRevealManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\EmergencyLevelLoader.cs" />
-    <Compile Include="Assets\_GAME_\Scripts\ScreenFadeManager.cs" />
-    <Compile Include="Assets\_GAME_\Scripts\CollectibleItem.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Game Over Manager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\UI Manager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\Arrow.cs" />
@@ -97,6 +93,8 @@
     <Compile Include="Assets\_GAME_\Scripts\SwordOfChaosDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ClueBox.cs" />
     <Compile Include="Assets\_GAME_\Scripts\PlayerControllerTest.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\CollectibleLevelManager.cs" />
+    <Compile Include="Assets\_GAME_\Scripts\GameCompletionManager.cs" />
     <Compile Include="Assets\_GAME_\Scripts\SwordOfBalanceDialogue.cs" />
     <Compile Include="Assets\_GAME_\Scripts\ControlsDisplayManager.cs" />
   </ItemGroup>

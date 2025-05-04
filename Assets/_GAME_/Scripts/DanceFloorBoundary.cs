@@ -81,9 +81,6 @@ public class DanceFloorBoundary : MonoBehaviour
         playerTransform.position = newPosition;
 
         Debug.Log("Player pushed back into dance floor boundary");
-
-        // Optionally display a message to the player
-        // You can add UI feedback here
     }
 
     private void OnDrawGizmos()

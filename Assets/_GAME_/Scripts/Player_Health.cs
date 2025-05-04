@@ -12,9 +12,9 @@ public class Player_Health : MonoBehaviour
     [SerializeField] private float knockbackForce = 5f;
 
     [Header("UI References")]
-    [SerializeField] private GameObject[] heartObjects; // Assign your heart UI objects here
+    [SerializeField] private GameObject[] heartObjects; // Assign heart UI objects here
     [SerializeField] private GameObject gameOverPanel; // Create a Game Over UI panel
-
+    
     [Header("Audio")]
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip gameOverSound;
@@ -293,11 +293,6 @@ public class Player_Health : MonoBehaviour
     {
         // Wait for sound to finish or a set time
         yield return new WaitForSeconds(2f);
-
-        // You can either reload the current scene or go to a game over scene
-        // Uncomment one of these:
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        // SceneManager.LoadScene("GameOverScene");
     }
 
     // Public accessor method for current health

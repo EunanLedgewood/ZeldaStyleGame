@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_GAME_/Scenes/Main Menu.unity
+    path: Assets/_GAME_/Scenes/MainMenu.unity
     guid: 89c8088e1af43554fb795fcce389d070
   - enabled: 1
-    path: Assets/_GAME_/Scenes/Level1SelectSword.unity
+    path: Assets/_GAME_/Scenes/LevelSelect.unity
     guid: f869a8edb8b43f64792f79fa98a272b2
   - enabled: 1
     path: Assets/_GAME_/Scenes/Balance1.unity
@@ -19,10 +19,7 @@ EditorBuildSettings:
     guid: 42f89080cbb9df74484945cc80f07381
   - enabled: 1
     path: Assets/_GAME_/Scenes/Balance3.unity
-    guid: 558aa8bd08f513e4c91a20e6143ad8ea
-  - enabled: 1
-    path: Assets/_GAME_/Scenes/Balance4.unity
-    guid: adca866f05593a0489993ef795c44a97
+    guid: 9800fe14e816c624fbe69ed948514cd1
   - enabled: 1
     path: Assets/_GAME_/Scenes/Chaos1.unity
     guid: 14ff539f47b21b64f97af56289c64ff6
@@ -33,18 +30,12 @@ EditorBuildSettings:
     path: Assets/_GAME_/Scenes/Chaos3.unity
     guid: 0a5b04d0a36bcec469cc193c69294aa1
   - enabled: 1
-    path: Assets/_GAME_/Scenes/Chaos4.unity
-    guid: b16ac7064ee8870498a4f07843b63552
-  - enabled: 1
-    path: Assets/_GAME_/Scenes/Order1ForgottenVillage.unity
+    path: Assets/_GAME_/Scenes/Order1.unity
     guid: 853b0d825e9e3284594b08b0024d626e
   - enabled: 1
     path: Assets/_GAME_/Scenes/Order2.unity
     guid: 2789dbba747cbe048a322ec8a74e7689
   - enabled: 1
-    path: Assets/_GAME_/Scenes/Order3HighlandsKeep.unity
+    path: Assets/_GAME_/Scenes/Order3.unity
     guid: 56dd469c3092ca947b57f5e56daa26db
-  - enabled: 1
-    path: Assets/_GAME_/Scenes/Order4ShrineOfOrder.unity
-    guid: 74668e633dd96ea438dfce06f72d5512
   m_configObjects: {}

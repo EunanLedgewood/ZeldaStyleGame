@@ -77,9 +77,8 @@ public class Slot : MonoBehaviour
         Gizmos.color = isFilled ? Color.green : Color.yellow;
         Gizmos.DrawWireSphere(transform.position, 0.5f);
 
-        // Draw label to show status
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 0.75f,
-                                  $"{slotColor}: {(isFilled ? "FILLED" : "empty")}");
+        // Skip drawing labels - UnityEditor.Handles is not available in build
+        // This was causing the error
 
         // Show connection to collectible if this is Chaos3Level
         if (isChaos3Level && collectibleToReveal != null)
