@@ -306,9 +306,16 @@ public class GameUI_Manager : MonoBehaviour
 
     public void GoToMainMenu()
     {
+
+        // Stop all audio before quitting
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.StopMusic(); 
+        }
+
         // Reset time scale
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void QuitGame()

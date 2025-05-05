@@ -99,7 +99,7 @@ public class Player_Health : MonoBehaviour
         lastDamageTime = Time.time;
     }
 
-    // New method specific for dance floor damage
+    // Method specific for dance floor damage
     public void TakeDanceFloorDamage(Vector2 damageSource)
     {
         // Prevent damage if not enabled, player is invincible, game is over, or damage was recent

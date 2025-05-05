@@ -92,7 +92,7 @@ public class Enemy_Archer : MonoBehaviour
         // Attack when cooldown is complete
         if (cooldownTimer <= 0)
         {
-            // Check if we need to verify player visibility
+            // Check if player visibility needs to be verified
             bool shouldShoot = true;
             if (shootOnlyWhenPlayerVisible && playerTransform != null)
             {

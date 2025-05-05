@@ -48,31 +48,6 @@ public class EmergencyFix : MonoBehaviour
             }
         }
 
-        // Check PauseMenuManager
-        var pauseMenu = GameObject.FindObjectOfType<PauseMenuManager>();
-        if (pauseMenu != null)
-        {
-            Debug.Log("Found PauseMenuManager");
-
-            // Force unpause if needed
-            var isPausedField = pauseMenu.GetType().GetField("isPaused",
-                System.Reflection.BindingFlags.NonPublic |
-                System.Reflection.BindingFlags.Instance);
-
-            if (isPausedField != null)
-            {
-                bool isPaused = (bool)isPausedField.GetValue(pauseMenu);
-                Debug.Log($"PauseMenuManager.isPaused = {isPaused}");
-
-                if (isPaused)
-                {
-                    Debug.LogError("GAME WAS PAUSED! Forcing unpause");
-                    isPausedField.SetValue(pauseMenu, false);
-                    Time.timeScale = 1.0f;
-                }
-            }
-        }
-
         // Check LevelRevealManager
         var levelReveal = GameObject.FindObjectOfType<LevelRevealManager>();
         if (levelReveal != null)
